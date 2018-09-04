@@ -1,18 +1,7 @@
 #include "Scanner.h"
 
-void Scanner::init (int maxTokens)
-{
-    // UNIMPLEMENTED
-}
-
-int Scanner::scan (const char * in)
+int scan (const char * in, TokenStore & tokenStore)
 {
     // UNIMPLEMENTED
     return -1;
-}
-
-Token * Scanner::getTokens ()
-{
-    // UNIMPLEMENTED
-    return nullptr;
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "Token.h"
+#include "TokenStore.h"
 
 // Scanner is a utility for processing sequential character input
 // into numeric calculation Tokens.
@@ -17,26 +18,10 @@
 // left in the store. At the point of overflow, the Scanner begins
 // overwriting the beginning of the store.
 
-class Scanner {
-public:
-
-    // Initialize the Scanner such that it has space for at most
-    // `maxTokens` Tokens. 
-    // 
-    // @param maxTokens -- the maximum number of tokens that the
-    //        scanner can store.
-    void init (int maxTokens);
-
-    // Scans the text represented by cstring `in` creating sequential
-    // `Tokens` in its store until `maxTokens` is reached.
-    //
-    // @param in -- cstring representing typed calculation input
-    // @return the number of Tokens scanned
-    // @thows uninitialized -- if `Scanner.init` hasn't been called
-    int scan (const char * in);
-
-    // Returns a pointer to a `Token` that represents the start of
-    // a scan result.
-    Token * getTokens ();
-
-};
+// Scans the text represented by cstring `in` creating sequential
+// `Tokens` in its store until `maxTokens` is reached.
+//
+// @param in -- cstring representing typed calculation input
+// @return the number of Tokens scanned
+// @thows uninitialized -- if `Scanner.init` hasn't been called
+int scan (const char * in, TokenStore & store);

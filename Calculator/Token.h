@@ -6,11 +6,14 @@
 // not been assigned a value.
 enum TokenType {
     UNASSIGNED, OPER_ADD, OPER_SUB, OPER_MUL, OPER_DIV,
-    INT_NUM, FIXED_NUM
+    OPER_ASSN, NAME, INT_NUM, FIXED_NUM,
 };
 
 // Lexemes are the basic output units of scanning.
 struct Token {
     TokenType type = UNASSIGNED;
-    const char * val = nullptr;
+    long long iVal = -1;
+    double fVal = -1.0;
+    Token * lchild = nullptr;
+    Token * rchild = nullptr;
 };

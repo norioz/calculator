@@ -1,17 +1,6 @@
 #include "Parser.h"
 
-void Parser::init (int maxSize)
+Token * parse (const Token * tokens, int length)
 {
     // UNIMPLEMENTED
-}
-
-void Parser::parse (Token * tokens)
-{
-    // UNIMPLEMENTED
-}
-
-ParseTree * Parser::getParseTree ()
-{
-    // UNIMPLEMENTED
-    return nullptr;
 }
