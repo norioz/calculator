@@ -27,6 +27,9 @@
     <ClInclude Include="ParseTree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TokenStore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scanner.cpp">
