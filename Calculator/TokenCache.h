@@ -21,11 +21,12 @@
 
 class TokenCache {
     int m_size = -1;
-    int m_chain_ids[];
-    int m_chain_lengths[];
-    Token m_tokens[];
+    int * m_chainIds = nullptr;
+    int * m_chainLengths = nullptr;
+    Token * m_tokens = nullptr;
 
-public: 
+public:
+    ~TokenCache ();
 
     // Initialize the cache to hold a fixed max number of Tokens.
     //
