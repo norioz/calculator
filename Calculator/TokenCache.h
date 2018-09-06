@@ -20,6 +20,12 @@
 // are overwritten.
 
 class TokenCache {
+    int m_size = -1;
+    int m_chain_ids[];
+    int m_chain_lengths[];
+    Token m_tokens[];
+
+public: 
 
     // Initialize the cache to hold a fixed max number of Tokens.
     //
