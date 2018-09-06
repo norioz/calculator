@@ -9,7 +9,7 @@ enum TokenType {
     OPER_ASSN, NAME, INT_NUM, FIXED_NUM,
 };
 
-// Lexemes are the basic output units of scanning.
+// Tokens are the basic output units of scanning.
 struct Token {
     TokenType type = UNASSIGNED;
     long long iVal = -1;
