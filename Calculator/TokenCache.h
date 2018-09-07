@@ -20,6 +20,8 @@
 // are overwritten.
 
 class TokenCache {
+    int m_maxTokens = -1;
+    int m_startIdxCounter = 0;
     int m_size = -1;
     int * m_chainIds = nullptr;
     int * m_chainLengths = nullptr;
@@ -32,6 +34,9 @@ public:
     //
     // @param maxTokens - determines the size of the cache
     void init (int maxTokens);
+
+    // Indicates whether the cache has been initialized.
+    bool isInitialized ();
 
     // Copies Tokens into the cache.
     //
