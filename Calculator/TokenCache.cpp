@@ -47,7 +47,7 @@ bool TokenCache::isInitialized ()
 int TokenCache::add (const Token * tokens, int num)
 {
     if (!isInitialized()) throw uninitalized;
-    
+
     if (num > m_maxTokens) throw sizeLimit;
 
     // If there isn't enough room left to store the Tokens
@@ -74,15 +74,19 @@ int TokenCache::add (const Token * tokens, int num)
     m_startIdxCounter += num;
 
     // Assign the chain an ID.
-    
 
-    return 
+
+    return 0; // TODO
 }
 
 Token * TokenCache::getById (int id)
 {
+    // TODO UNIMPLEMENTED
+    return nullptr;
 }
 
 int TokenCache::chainLength (int id)
 {
+    // TODO UNIMPLEMENTED
+    return 0;
 }

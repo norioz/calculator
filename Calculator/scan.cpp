@@ -1,6 +1,6 @@
-#include "Scanner.h"
+#include "scan.h"
 
-int scan (const char * in, TokenStore & tokenStore)
+int scan (const char * in, TokenCache & tc)
 {
     // UNIMPLEMENTED
     return -1;

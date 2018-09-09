@@ -1,6 +1,6 @@
 #pragma once
 #include "Token.h"
-#include "TokenStore.h"
+#include "TokenCache.h"
 
 // Scanner is a utility for processing sequential character input
 // into numeric calculation Tokens.
@@ -24,4 +24,4 @@
 // @param in -- cstring representing typed calculation input
 // @return the number of Tokens scanned
 // @thows uninitialized -- if `Scanner.init` hasn't been called
-int scan (const char * in, TokenStore & store);
+int scan (const char * in, TokenCache & tc);

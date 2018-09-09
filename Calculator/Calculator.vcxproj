@@ -121,6 +121,7 @@
     <ClInclude Include="TokenCache.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CalculatorMain.cpp" />
     <ClCompile Include="scan.cpp" />
     <ClCompile Include="parse.cpp" />
     <ClCompile Include="TokenCache.cpp" />
