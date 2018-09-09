@@ -9,84 +9,113 @@ class UninitializedException : public std::exception
     {
         return "TokenCache not initialized";
     }
-} uninitalized;
+};
 
-class SizeLimit : public std::exception
+class ChainSizeLimitException : public std::exception
 {
     virtual const char * what () const throw()
     {
-        return "Cache maxToken size too small for requested add";
+        return "chain is too large to be stored";
     }
-} sizeLimit;
+};
+
+class CacheFullException : public std::exception
+{
+    virtual const char * what () const throw()
+    {
+        return "cache full";
+    }
+};
 
 TokenCache::~TokenCache ()
 {
-    delete[] m_chainIds;
-    m_chainIds = nullptr;
     delete[] m_chainLengths;
     m_chainLengths = nullptr;
-    delete[] m_tokens;
-    m_tokens = nullptr;
+    for (int i = 0; i < m_maxChains; ++i) {
+        delete[] m_chains[i];
+    }
+    delete[] m_chains;
+    m_chains = nullptr;
+    m_maxTokensPerChain = 0;
+    m_maxChains = 0;
 }
 
-void TokenCache::init (int maxTokens)
+void TokenCache::init (int maxChains, int maxTokensPerChain)
 {
-    m_maxTokens = maxTokens;
-    m_chainIds = new int[maxTokens];
-    for (int i = 0; i < maxTokens; ++i) { m_chainIds[i] = -1; }
-    m_chainLengths = new int[maxTokens];
-    for (int i = 0; i < maxTokens; ++i) { m_chainLengths[i] = -1; }
-    m_tokens = new Token[maxTokens];
+    m_maxChains = maxChains;
+    m_maxTokensPerChain = maxTokensPerChain;
+    m_chainLengths = new int[maxChains];
+    for (int i = 0; i < maxChains; ++i) {
+        m_chainLengths[i] = -1;
+    }
+    m_chains = new Token*[maxChains];
+    for (int i = 0; i < maxChains; ++i) {
+        m_chains[i] = new Token[maxTokensPerChain];
+    }
 }
 
 bool TokenCache::isInitialized ()
 {
-    return m_tokens != nullptr;
+    return m_chains != nullptr;
 }
 
 int TokenCache::add (const Token * tokens, int num)
 {
-    if (!isInitialized()) throw uninitalized;
+    if (!isInitialized()) throw UninitializedException();
 
-    if (num > m_maxTokens) throw sizeLimit;
+    if (num > m_maxTokensPerChain) throw ChainSizeLimitException();
 
-    // If there isn't enough room left to store the Tokens
-    // reset the current id to the start.
-    if (m_startIdxCounter + num >= m_maxTokens) {
-        m_startIdxCounter = 0;
+    if (m_chainCounter == m_maxChains) throw CacheFullException();
+
+    // Find an open chain slot.
+    int idx = 0;
+    while (idx < m_maxChains) {
+        if (m_chainLengths[idx] == -1) {
+            break;
+        }
+        ++idx;
     }
 
-    // Wipe out all IDs and lengths for chains that will
-    // be overwritten.
-
-
     // Transcibe the Tokens.
+    Token * chain = m_chains[idx];
     for (int i = 0; i < num; ++i) {
         Token source = tokens[i];
-        Token target = m_tokens[i];
+        Token target = chain[i];
         target.fVal = source.fVal;
         target.iVal = source.iVal;
         target.type = source.type;
         // child pointers are not copied
     }
+    m_chainLengths[idx] = num;
 
-    // Update the start index counter.
-    m_startIdxCounter += num;
-
-    // Assign the chain an ID.
-
-
-    return 0; // TODO
+    return idx;
 }
 
-Token * TokenCache::getById (int id)
+void TokenCache::remove (int id)
 {
-    // TODO UNIMPLEMENTED
-    return nullptr;
+    --m_chainCounter;
+    m_chainLengths[id] = -1;
 }
 
-int TokenCache::chainLength (int id)
+Token * TokenCache::getChain (int id)
 {
-    // TODO UNIMPLEMENTED
-    return 0;
+    if (m_chainLengths[id] == -1) {
+        return nullptr;
+    }
+    return m_chains[id];
+}
+
+int TokenCache::getChainLength (int id)
+{
+    return m_chainLengths[id];
+}
+
+int TokenCache::getMaxTokensPerChain ()
+{
+    return m_maxTokensPerChain;
+}
+
+int TokenCache::getMaxChains ()
+{
+    return m_maxChains;
 }

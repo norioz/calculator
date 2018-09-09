@@ -5,7 +5,6 @@
 namespace Microsoft {
     namespace VisualStudio {
         namespace CppUnitTestFramework {
-
             template<>
             static std::wstring ToString<enum TokenType>(const enum TokenType & tokenType) {
                 return L"Some string representing TokenType.";
