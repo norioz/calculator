@@ -19,10 +19,11 @@ int main ()
     int tcid = scan(line, tc);
     
     // make a parse tree from the tokens
-    parse(tc.getChain(tcid), tc.getChainLength(tcid));
+    //parse(tc.getChain(tcid), tc.getChainLength(tcid));
 
     // execute the calculation
     // TODO
 
+    system("PAUSE");
     return 0;
 }

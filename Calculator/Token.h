@@ -6,7 +6,7 @@
 // not been assigned a value.
 enum TokenType {
     UNASSIGNED, OPER_ADD, OPER_SUB, OPER_MUL, OPER_DIV,
-    OPER_ASSN, NAME, INT_NUM, FIXED_NUM,
+    OPER_ASSN, NAME, NUM_INT, NUM_FLOAT
 };
 
 // Tokens are the basic output units of scanning.
