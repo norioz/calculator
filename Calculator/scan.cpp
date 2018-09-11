@@ -1,25 +1,31 @@
-#include <iostream>
+#include <exception>
 #include <regex>
-#include <string>
+#include <string.h>
 #include <sstream>
 #include <vector>
 #include "scan.h"
 
 using namespace std;
 
-regex num_int_matcher("-?[[:digit:]]+");
+// TODO make appropriately static
+regex num_int_matcher("-?[0-9]+");
 regex num_float_matcher("-?[0-9]*\.?[0-9]+");
 regex name_matcher("[a-zA-Z0-9_]+");
 
 int scan (const char * in, TokenCache & tc)
 {
+    // TODO copy in and use strtok
+    //      this would eliminate allocations
     stringstream ss(in);
 
     // TODO
     // Get a chain to store tokens in from the
     // TokenCache.
 
+    // TODO it would be good to eliminate this
+    //      we already have the storage in TokenCache
     vector<Token> tokens;
+
     string t;
     while (ss >> t) {
         Token token;
@@ -40,20 +46,35 @@ int scan (const char * in, TokenCache & tc)
         }
         else if (regex_match(t, num_int_matcher)) {
             token.type = NUM_INT;
-            // TODO convert to int value
+            token.iVal = atoi(t.c_str);
         }
         else if (regex_match(t, num_float_matcher)) {
             token.type = NUM_FLOAT;
-            // TODO convert to float value
+            token.fVal = atof(t.c_str);
         }
         else if (regex_match(t, name_matcher)) {
             token.type = NAME;
         }
         else {
-            // TODO not recognized; throw
+            throw UnrecognizedTokenTypeException(t.c_str);
         }
-        cout << token.type << " ";
+        tokens.push_back(token);
     }
-    cout << endl;
     return 0;
+}
+
+// UnrecognizedTokenTypeException IMPL
+UnrecognizedTokenTypeException::UnrecognizedTokenTypeException(const char * text) : m_text(text) {}
+
+const char * UnrecognizedTokenTypeException::getText ()
+{
+    return m_text;
+}
+
+const char * UnrecognizedTokenTypeException::what () const throw()
+{
+    char result[100];
+    strcpy(result, m_text);
+    strcat(result, " does not match a TokenType");
+    return result;
 }
