@@ -87,7 +87,8 @@ int TokenCache::add (const Token * tokens, int num)
         target.valLength = source.valLength;
         strcpy(target.val, source.val);
         target.type = source.type;
-        // child pointers are not copied
+        target.lChildChianIdx = source.lChildChianIdx;
+        target.rChildChianIdx = source.rChildChianIdx;
     }
     m_chainLengths[idx] = num;
 
