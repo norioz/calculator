@@ -7,6 +7,14 @@
 
 using namespace std;
 
+// Checks the val and valLength in the given token and assigns 
+// an operator Token::Type to it if the val matches a supported
+// operator.
+//
+// @param token - a partially completed Token that must have a
+//         val and valLength
+// @return an indicator of whether an opperator type was
+//         assigned
 bool assignTypeOper (Token & token)
 {
     if (token.valLength != 1) {
@@ -33,6 +41,13 @@ bool assignTypeOper (Token & token)
     }
 }
 
+// Checks the val and valLength in the given token and assigns 
+// the NUM_INT Token::Type to it if the val represents a whole
+// number.
+//
+// @param token - a partially completed Token that must have a
+//         val and valLength
+// @return an indicator of whether NUM_INT was assigned
 bool assignTypeInt (Token & token)
 {
     for (int i = 0; i < token.valLength; ++i) {
@@ -44,6 +59,13 @@ bool assignTypeInt (Token & token)
     return true;
 }
 
+// Checks the val and valLength in the given token and assigns 
+// the NUM_FLOAT Token::Type to it if the val represents 
+// floating point number.
+//
+// @param token - a partially completed Token that must have a
+//         val and valLength
+// @return an indicator of whether NUM_FLOAT was assigned
 bool assignTypeFloat (Token & token)
 {
     int dotIdx = -1;
@@ -64,6 +86,13 @@ bool assignTypeFloat (Token & token)
     return true;
 }
 
+// Checks the val and valLength in the given token and assigns
+// the NAME Token::Type to it if the val matches the rules for
+// a supported name.
+//
+// @param token - a partially completed Token that must have a
+//         val and valLength
+// @return an indicator of whether the NAME type was assigned
 bool assignTypeName (Token & token)
 {
     for (int i = 0; i < token.valLength; ++i) {
