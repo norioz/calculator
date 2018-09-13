@@ -1,66 +1,117 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <exception>
-#include <regex>
 #include <string.h>
-#include <sstream>
-#include <vector>
+#include <ctype.h>
 #include "scan.h"
 
 using namespace std;
 
-// TODO make appropriately static
-regex num_int_matcher("-?[0-9]+");
-regex num_float_matcher("-?[0-9]*\.?[0-9]+");
-regex name_matcher("[a-zA-Z0-9_]+");
+bool assignTypeOper (Token & token)
+{
+    if (token.valLength != 1) {
+        return false;
+    }
+    switch (token.val[0]) {
+    case '+':
+        token.type = Token::OPER_ADD;
+        return true;
+    case '-':
+        token.type = Token::OPER_SUB;
+        return true;
+    case '*':
+        token.type = Token::OPER_MUL;
+        return true;
+    case '/':
+        token.type = Token::OPER_DIV;
+        return true;
+    case '=':
+        token.type = Token::OPER_ASSN;
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool assignTypeInt (Token & token)
+{
+    for (int i = 0; i < token.valLength; ++i) {
+        if (!isdigit(token.val[i])) {
+            return false;
+        }
+    }
+    token.type = Token::NUM_INT;
+    return true;
+}
+
+bool assignTypeFloat (Token & token)
+{
+    int dotIdx = -1;
+    for (int i = 0; i < token.valLength; ++i) {
+        if (token.val[i] == '.') {
+            if (dotIdx != -1) {
+                return false;
+            }
+            else {
+                dotIdx = i;
+            }
+        }
+        else if (!isdigit(token.val[i])) {
+            return false;
+        }
+    }
+    token.type = Token::NUM_FLOAT;
+    return true;
+}
+
+bool assignTypeName (Token & token)
+{
+    for (int i = 0; i < token.valLength; ++i) {
+        char t = token.val[i];
+        if (!(t == '_' || isdigit(t) || isalpha(t))) {
+            return false;
+        }
+    }
+    token.type = Token::NAME;
+    return true;
+}
 
 int scan (const char * in, TokenCache & tc)
 {
-    // TODO copy in and use strtok
-    //      this would eliminate allocations
-    stringstream ss(in);
+    int inputLength = strlen(in);
+    int maxTokens = tc.getMaxTokensPerChain();
 
-    // TODO
-    // Get a chain to store tokens in from the
-    // TokenCache.
+    // Copy the input so it can be tokenized in place.
+    char input[200];
+    strcpy(input, in);
 
-    // TODO it would be good to eliminate this
-    //      we already have the storage in TokenCache
-    vector<Token> tokens;
+    int tokenCounter = 0;
+    Token tokens[200];
 
-    string t;
-    while (ss >> t) {
+    // Split the input and convert it into Tokens.
+    char * tok;
+    tok = strtok(input, " ");
+    while (tok != nullptr) {
+
+        // Build a Token from the input text.
         Token token;
-        if (t == "+") {
-            token.type = OPER_ADD;
+        strcpy(token.val, in);
+        token.valLength = strlen(tok);
+
+        // Assign the Token a type.
+        if (!(assignTypeOper(token) || assignTypeInt(token) ||
+            assignTypeFloat(token) || assignTypeName(token))) {
+            throw UnrecognizedTokenTypeException(tok);
         }
-        else if (t == "-") {
-            token.type = OPER_SUB;
-        }
-        else if (t == "*") {
-            token.type = OPER_MUL;
-        }
-        else if (t == "/") {
-            token.type = OPER_DIV;
-        }
-        else if (t == "=") {
-            token.type = OPER_ASSN;
-        }
-        else if (regex_match(t, num_int_matcher)) {
-            token.type = NUM_INT;
-            token.iVal = atoi(t.c_str);
-        }
-        else if (regex_match(t, num_float_matcher)) {
-            token.type = NUM_FLOAT;
-            token.fVal = atof(t.c_str);
-        }
-        else if (regex_match(t, name_matcher)) {
-            token.type = NAME;
-        }
-        else {
-            throw UnrecognizedTokenTypeException(t.c_str);
-        }
-        tokens.push_back(token);
+
+        // Add the completed Token to the output holder.
+        tokens[tokenCounter++] = token;
+
+        // Get the next input.
+        tok = strtok(nullptr, " ");
     }
-    return 0;
+
+    return tc.add(tokens,tokenCounter);
 }
 
 // UnrecognizedTokenTypeException IMPL

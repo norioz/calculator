@@ -1,19 +1,25 @@
 #pragma once
 
-// TokenType enumerates the possible types that a token can
+// Tokens are the basic output units of scanning.
+// Type enumerates the possible types that a token can
 // be assigned.
 // The `UNASSIGNED` type is reserved for Tokens that have
 // not been assigned a value.
-enum TokenType {
-    UNASSIGNED, OPER_ADD, OPER_SUB, OPER_MUL, OPER_DIV,
-    OPER_ASSN, NAME, NUM_INT, NUM_FLOAT
-};
 
-// Tokens are the basic output units of scanning.
 struct Token {
-    TokenType type = UNASSIGNED;
-    long long iVal = -1;
-    double fVal = -1.0;
+    enum Type {
+        UNASSIGNED,
+        OPER_ADD,
+        OPER_SUB,
+        OPER_MUL,
+        OPER_DIV,
+        OPER_ASSN,
+        NAME,
+        NUM_INT,
+        NUM_FLOAT
+    } type = UNASSIGNED;
+    char val[20] = "UNASSGINED";
+    int valLength = -1;
     Token * lchild = nullptr;
     Token * rchild = nullptr;
 };

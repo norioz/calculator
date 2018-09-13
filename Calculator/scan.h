@@ -1,4 +1,5 @@
 #pragma once
+#include <exception>
 #include "Token.h"
 #include "TokenCache.h"
 
@@ -20,7 +21,7 @@ int scan (const char * in, TokenCache & tc);
 // UnrecognizedTokenException is thrown by `scan` when text in the
 // input doesn't match any of the regexes that define the existing
 // TokenTypes.
-class UnrecognizedTokenTypeException : exception {
+class UnrecognizedTokenTypeException : public std::exception {
     const char * m_text;
 public:
     // Constructor takes in a the text that could not be tokenized.
@@ -29,5 +30,5 @@ public:
     // Get the text that could not be tokenized.
     const char * getText ();
 
-    const char * what() const throw();
+    virtual const char * what() const throw();
 };

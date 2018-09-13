@@ -1,4 +1,7 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <exception>
+#include <string.h>
 #include "TokenCache.h"
 
 // Exception to be thrown when methods are
@@ -81,8 +84,8 @@ int TokenCache::add (const Token * tokens, int num)
     for (int i = 0; i < num; ++i) {
         Token source = tokens[i];
         Token target = chain[i];
-        target.fVal = source.fVal;
-        target.iVal = source.iVal;
+        target.valLength = source.valLength;
+        strcpy(target.val, source.val);
         target.type = source.type;
         // child pointers are not copied
     }

@@ -18,6 +18,8 @@ int main ()
     // scan the line
     int tcid = scan(line, tc);
     
+    std::cout << tcid;
+
     // make a parse tree from the tokens
     //parse(tc.getChain(tcid), tc.getChainLength(tcid));
 

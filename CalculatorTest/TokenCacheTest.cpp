@@ -6,7 +6,7 @@ namespace Microsoft {
     namespace VisualStudio {
         namespace CppUnitTestFramework {
             template<>
-            static std::wstring ToString<enum TokenType>(const enum TokenType & tokenType) {
+            static std::wstring ToString<enum Token::Type>(const enum Token::Type & tokenType) {
                 return L"Some string representing TokenType.";
             }
 
@@ -27,8 +27,8 @@ namespace CalculatorTest
             // TODO this is not a complete test case.
             // It is only here to test the unit testing mechanism.
             Token t;
-            t.type = UNASSIGNED;
-            Assert::AreEqual(t.type, UNASSIGNED);
+            t.type = Token::UNASSIGNED;
+            Assert::AreEqual(t.type, Token::UNASSIGNED);
 		}
 
 	};
