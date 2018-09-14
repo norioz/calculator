@@ -124,7 +124,7 @@ int scan (const char * in, TokenCache & tc)
 
         // Build a Token from the input text.
         Token token;
-        strcpy(token.val, in);
+        strcpy(token.val, tok);
         token.valLength = strlen(tok);
 
         // Assign the Token a type.

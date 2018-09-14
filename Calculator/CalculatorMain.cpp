@@ -21,7 +21,9 @@ int main ()
     std::cout << tcid;
 
     // make a parse tree from the tokens
-    //parse(tc.getChain(tcid), tc.getChainLength(tcid));
+    Token * rootPtr = parse(tc, tcid);
+
+    std::cout << rootPtr->val;
 
     // execute the calculation
     // TODO

@@ -82,11 +82,9 @@ int TokenCache::add (const Token * tokens, int num)
     // Transcibe the Tokens.
     Token * chain = m_chains[idx];
     for (int i = 0; i < num; ++i) {
-        Token source = tokens[i];
-        Token target = chain[i];
-        target.valLength = source.valLength;
-        strcpy(target.val, source.val);
-        target.type = source.type;
+        chain[i].valLength = tokens[i].valLength;
+        strcpy(chain[i].val, tokens[i].val);
+        chain[i].type = tokens[i].type;
         // child pointers are not copied
     }
     m_chainLengths[idx] = num;
