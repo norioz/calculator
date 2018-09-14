@@ -1,7 +1,9 @@
 #pragma once
-#include "Token.h"
+#include "TokenCache.h"
 
 // Creats syntax trees from sequential lists of Tokens,
 // intended for use in numeric calculations.
+//
+//Token * parse (const Token * tokens, int length);
 
-Token * parse (const Token * tokens, int length);
+Token * parse (TokenCache & tc, int chainId);

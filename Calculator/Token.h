@@ -20,6 +20,6 @@ struct Token {
     } type = UNASSIGNED;
     char val[20] = "UNASSGINED";
     int valLength = -1;
-    int rChildChianIdx = -1;
-    int lChildChianIdx = -1;
+    Token * childL = nullptr;
+    Token * childR = nullptr;
 };
