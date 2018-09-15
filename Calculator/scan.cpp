@@ -17,10 +17,10 @@ using namespace std;
 //         assigned
 bool assignTypeOper (Token & token)
 {
-    if (token.valLength != 1) {
+    if (token.strLength != 1) {
         return false;
     }
-    switch (token.val[0]) {
+    switch (token.str[0]) {
     case '+':
         token.type = Token::OPER_ADD;
         return true;
@@ -50,11 +50,13 @@ bool assignTypeOper (Token & token)
 // @return an indicator of whether NUM_INT was assigned
 bool assignTypeInt (Token & token)
 {
-    for (int i = 0; i < token.valLength; ++i) {
-        if (!isdigit(token.val[i])) {
+    for (int i = 0; i < token.strLength; ++i) {
+        if (!isdigit(token.str[i])) {
             return false;
         }
     }
+    token.val.isInt = true;
+    token.val.iVal = atoi(token.str);
     token.type = Token::NUM_INT;
     return true;
 }
@@ -69,8 +71,8 @@ bool assignTypeInt (Token & token)
 bool assignTypeFloat (Token & token)
 {
     int dotIdx = -1;
-    for (int i = 0; i < token.valLength; ++i) {
-        if (token.val[i] == '.') {
+    for (int i = 0; i < token.strLength; ++i) {
+        if (token.str[i] == '.') {
             if (dotIdx != -1) {
                 return false;
             }
@@ -78,10 +80,12 @@ bool assignTypeFloat (Token & token)
                 dotIdx = i;
             }
         }
-        else if (!isdigit(token.val[i])) {
+        else if (!isdigit(token.str[i])) {
             return false;
         }
     }
+    token.val.isFloat = true;
+    token.val.fVal = atof(token.str);
     token.type = Token::NUM_FLOAT;
     return true;
 }
@@ -95,8 +99,8 @@ bool assignTypeFloat (Token & token)
 // @return an indicator of whether the NAME type was assigned
 bool assignTypeName (Token & token)
 {
-    for (int i = 0; i < token.valLength; ++i) {
-        char t = token.val[i];
+    for (int i = 0; i < token.strLength; ++i) {
+        char t = token.str[i];
         if (!(t == '_' || isdigit(t) || isalpha(t))) {
             return false;
         }
@@ -124,8 +128,8 @@ int scan (const char * in, TokenCache & tc)
 
         // Build a Token from the input text.
         Token token;
-        strcpy(token.val, tok);
-        token.valLength = strlen(tok);
+        strcpy(token.str, tok);
+        token.strLength = strlen(tok);
 
         // Assign the Token a type.
         if (!(assignTypeOper(token) || assignTypeInt(token) ||

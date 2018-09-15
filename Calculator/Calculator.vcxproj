@@ -115,15 +115,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="apply.h" />
+    <ClInclude Include="CalcWorker.h" />
+    <ClInclude Include="eval.h" />
+    <ClInclude Include="Number.h" />
     <ClInclude Include="scan.h" />
     <ClInclude Include="parse.h" />
+    <ClInclude Include="Scope.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="TokenCache.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="apply.cpp" />
     <ClCompile Include="CalculatorMain.cpp" />
+    <ClCompile Include="CalcWorker.cpp" />
+    <ClCompile Include="eval.cpp" />
     <ClCompile Include="scan.cpp" />
     <ClCompile Include="parse.cpp" />
+    <ClCompile Include="Scope.cpp" />
     <ClCompile Include="TokenCache.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
