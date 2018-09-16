@@ -7,6 +7,6 @@
 struct Number {
     bool isFloat = false;
     bool isInt = false;
-    int iVal = INFINITY;
+    int iVal = std::numeric_limits<int>::infinity();
     double fVal = std::numeric_limits<double>::infinity();
 };
