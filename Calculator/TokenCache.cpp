@@ -62,7 +62,7 @@ bool TokenCache::isInitialized ()
     return m_chains != nullptr;
 }
 
-int TokenCache::add (const Token * tokens, int num)
+int TokenCache::add (Token * tokens, int num)
 {
     if (!isInitialized()) throw UninitializedException();
 
@@ -82,9 +82,8 @@ int TokenCache::add (const Token * tokens, int num)
     // Transcibe the Tokens.
     Token * chain = m_chains[idx];
     for (int i = 0; i < num; ++i) {
-        chain[i].valLength = tokens[i].valLength;
-        strcpy(chain[i].val, tokens[i].val);
-        chain[i].type = tokens[i].type;
+        chain[i].setStr(tokens[i].getStr());
+        chain[i].setType(tokens[i].getType());
         // child pointers are not copied
     }
     m_chainLengths[idx] = num;

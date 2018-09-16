@@ -23,7 +23,7 @@ int main ()
     // make a parse tree from the tokens
     Token * rootPtr = parse(tc, tcid);
 
-    std::cout << rootPtr->val;
+    std::cout << rootPtr->getStr();
 
     // execute the calculation
     // TODO

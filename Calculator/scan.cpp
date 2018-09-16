@@ -17,24 +17,24 @@ using namespace std;
 //         assigned
 bool assignTypeOper (Token & token)
 {
-    if (token.strLength != 1) {
+    if (token.getStrLength() != 1) {
         return false;
     }
-    switch (token.str[0]) {
+    switch (token.getStr()[0]) {
     case '+':
-        token.type = Token::OPER_ADD;
+        token.setType(Token::OPER_ADD);
         return true;
     case '-':
-        token.type = Token::OPER_SUB;
+        token.setType(Token::OPER_SUB);
         return true;
     case '*':
-        token.type = Token::OPER_MUL;
+        token.setType(Token::OPER_MUL);
         return true;
     case '/':
-        token.type = Token::OPER_DIV;
+        token.setType(Token::OPER_DIV);
         return true;
     case '=':
-        token.type = Token::OPER_ASSN;
+        token.setType(Token::OPER_ASSN);
         return true;
     default:
         return false;
@@ -50,14 +50,16 @@ bool assignTypeOper (Token & token)
 // @return an indicator of whether NUM_INT was assigned
 bool assignTypeInt (Token & token)
 {
-    for (int i = 0; i < token.strLength; ++i) {
-        if (!isdigit(token.str[i])) {
+    const char * tokStr = token.getStr();
+    for (int i = 0; i < token.getStrLength(); ++i) {
+        if (!isdigit(tokStr[i])) {
             return false;
         }
     }
-    token.val.isInt = true;
-    token.val.iVal = atoi(token.str);
-    token.type = Token::NUM_INT;
+    Number * val = token.getVal();
+    val->isInt = true;
+    val->iVal = atoi(tokStr);
+    token.setType(Token::NUM_INT);
     return true;
 }
 
@@ -70,9 +72,10 @@ bool assignTypeInt (Token & token)
 // @return an indicator of whether NUM_FLOAT was assigned
 bool assignTypeFloat (Token & token)
 {
+    const char * tokStr = token.getStr();
     int dotIdx = -1;
-    for (int i = 0; i < token.strLength; ++i) {
-        if (token.str[i] == '.') {
+    for (int i = 0; i < token.getStrLength(); ++i) {
+        if (tokStr[i] == '.') {
             if (dotIdx != -1) {
                 return false;
             }
@@ -80,13 +83,14 @@ bool assignTypeFloat (Token & token)
                 dotIdx = i;
             }
         }
-        else if (!isdigit(token.str[i])) {
+        else if (!isdigit(tokStr[i])) {
             return false;
         }
     }
-    token.val.isFloat = true;
-    token.val.fVal = atof(token.str);
-    token.type = Token::NUM_FLOAT;
+    Number * val = token.getVal();
+    val->isFloat = true;
+    val->fVal = atof(tokStr);
+    token.setType(Token::NUM_FLOAT);
     return true;
 }
 
@@ -99,13 +103,14 @@ bool assignTypeFloat (Token & token)
 // @return an indicator of whether the NAME type was assigned
 bool assignTypeName (Token & token)
 {
-    for (int i = 0; i < token.strLength; ++i) {
-        char t = token.str[i];
+    for (int i = 0; i < token.getStrLength(); ++i) {
+        const char * tokStr = token.getStr();
+        char t = tokStr[i];
         if (!(t == '_' || isdigit(t) || isalpha(t))) {
             return false;
         }
     }
-    token.type = Token::NAME;
+    token.setType(Token::NAME);
     return true;
 }
 
@@ -122,26 +127,25 @@ int scan (const char * in, TokenCache & tc)
     Token tokens[200];
 
     // Split the input and convert it into Tokens.
-    char * tok;
-    tok = strtok(input, " ");
-    while (tok != nullptr) {
+    char * tokStr;
+    tokStr = strtok(input, " ");
+    while (tokStr != nullptr) {
 
         // Build a Token from the input text.
         Token token;
-        strcpy(token.str, tok);
-        token.strLength = strlen(tok);
+        token.setStr(tokStr);
 
         // Assign the Token a type.
         if (!(assignTypeOper(token) || assignTypeInt(token) ||
             assignTypeFloat(token) || assignTypeName(token))) {
-            throw UnrecognizedTokenTypeException(tok);
+            throw UnrecognizedTokenTypeException(tokStr);
         }
 
         // Add the completed Token to the output holder.
         tokens[tokenCounter++] = token;
 
         // Get the next input.
-        tok = strtok(nullptr, " ");
+        tokStr = strtok(nullptr, " ");
     }
 
     return tc.add(tokens,tokenCounter);

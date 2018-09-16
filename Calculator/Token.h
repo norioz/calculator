@@ -8,7 +8,8 @@
 // The `UNASSIGNED` type is reserved for Tokens that have
 // not been assigned a value.
 
-struct Token {
+class Token {
+public:
     enum Type {
         UNASSIGNED,
         OPER_ADD,
@@ -19,10 +20,35 @@ struct Token {
         NAME,
         NUM_INT,
         NUM_FLOAT
-    } type = UNASSIGNED;
-    char str[20] = "UNASSGINED";
-    int strLength = -1;
-    Number val;
-    Token * childL = nullptr;
-    Token * childR = nullptr;
+    };
+
+    bool isNumber ();
+
+    bool isOperator ();
+
+    void setType (Type t);
+    Token::Type getType ();
+
+    void setStr (const char * str);
+    char * getStr ();
+
+    int getStrLength ();
+
+    void setVal (int val);
+    void setVal (double val);
+    Number * getVal ();
+
+    void setLeftChild (Token * child);
+    Token * getLeftChild ();
+
+    void setRightChild (Token * child);
+    Token * getRightChild ();
+
+private:
+    Type m_type = UNASSIGNED;
+    char m_str[20] = "UNASSGINED";
+    int m_strLength = -1;
+    Number m_val;
+    Token * m_childL = nullptr;
+    Token * m_childR = nullptr;
 };

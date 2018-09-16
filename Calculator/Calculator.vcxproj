@@ -133,6 +133,7 @@
     <ClCompile Include="scan.cpp" />
     <ClCompile Include="parse.cpp" />
     <ClCompile Include="Scope.cpp" />
+    <ClCompile Include="Token.cpp" />
     <ClCompile Include="TokenCache.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

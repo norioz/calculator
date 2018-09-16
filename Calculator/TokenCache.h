@@ -39,7 +39,7 @@ public:
     // @param num - the number of Tokens to copy
     //
     // @return the integer ID of the resulting Token chain
-    int add (const Token * tokens, int num);
+    int add (Token * tokens, int num);
 
     // Removes a chain and allows for the ID to be reused.
     // Added chains/IDs are kept active and accessible until they
