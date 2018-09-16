@@ -5,7 +5,7 @@
 
 bool Token::isNumber ()
 {
-    return m_type == Token::NUM_FLOAT || Token::NUM_INT;
+    return m_type == Token::NUM_FLOAT || m_type == Token::NUM_INT;
 }
 
 bool Token::isOperator ()

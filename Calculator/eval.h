@@ -2,4 +2,4 @@
 #include "Number.h"
 #include "Token.h"
 
-Number * eval (Token * root);
+Number eval (Token * root);

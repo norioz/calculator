@@ -3,6 +3,7 @@
 #include "TokenCache.h"
 #include "scan.h"
 #include "parse.h"
+#include "eval.h"
 
 int main ()
 {
@@ -18,16 +19,13 @@ int main ()
     // scan the line
     int tcid = scan(line, tc);
     
-    std::cout << tcid;
-
     // make a parse tree from the tokens
     Token * rootPtr = parse(tc, tcid);
 
-    std::cout << rootPtr->getStr();
-
     // execute the calculation
-    // TODO
+    Number result = eval(rootPtr);
 
+    std::cout << (result.isInt ? result.iVal : result.fVal) << std::endl;
     system("PAUSE");
     return 0;
 }

@@ -10,3 +10,11 @@ struct Number {
     int iVal = std::numeric_limits<int>::infinity();
     double fVal = std::numeric_limits<double>::infinity();
 };
+
+Number operator+ (const Number a, const Number b);
+
+Number operator- (const Number a, const Number b);
+
+Number operator* (const Number a, const Number b);
+
+Number operator/ (const Number a, const Number b);

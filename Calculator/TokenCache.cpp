@@ -84,6 +84,15 @@ int TokenCache::add (Token * tokens, int num)
     for (int i = 0; i < num; ++i) {
         chain[i].setStr(tokens[i].getStr());
         chain[i].setType(tokens[i].getType());
+        if (tokens[i].isNumber()) {
+            Number * num = tokens[i].getVal();
+            if (num->isInt) {
+                chain[i].setVal(num->iVal);
+            }
+            else {
+                chain[i].setVal(num->fVal);
+            }
+        }
         // child pointers are not copied
     }
     m_chainLengths[idx] = num;
