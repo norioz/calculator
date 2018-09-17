@@ -19,12 +19,16 @@ public:
         OPER_ASSN,
         NAME,
         NUM_INT,
-        NUM_FLOAT
+        NUM_FLOAT,
+        PAREN_OPEN,
+        PAREN_CLOSE
     };
 
     bool isNumber ();
 
     bool isOperator ();
+
+    bool isParen();
 
     void setType (Type t);
     Token::Type getType ();

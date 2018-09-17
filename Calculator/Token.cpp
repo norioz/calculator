@@ -15,6 +15,11 @@ bool Token::isOperator ()
         m_type == Token::OPER_SUB;
 }
 
+bool Token::isParen ()
+{
+    return m_type == Token::PAREN_CLOSE || m_type == Token::PAREN_OPEN;
+}
+
 Token::Type Token::getType () { return m_type; }
 void Token::setType (Token::Type t) { m_type = t; }
 

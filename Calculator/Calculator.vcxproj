@@ -115,7 +115,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="apply.h" />
     <ClInclude Include="CalcWorker.h" />
     <ClInclude Include="eval.h" />
     <ClInclude Include="Number.h" />
@@ -126,7 +125,6 @@
     <ClInclude Include="TokenCache.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="apply.cpp" />
     <ClCompile Include="CalculatorMain.cpp" />
     <ClCompile Include="CalcWorker.cpp" />
     <ClCompile Include="eval.cpp" />

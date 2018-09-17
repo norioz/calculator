@@ -15,7 +15,7 @@ using namespace std;
 //         val and valLength
 // @return an indicator of whether an opperator type was
 //         assigned
-bool assignTypeOper (Token & token)
+bool tryToFillOper (Token & token)
 {
     if (token.getStrLength() != 1) {
         return false;
@@ -48,7 +48,7 @@ bool assignTypeOper (Token & token)
 // @param token - a partially completed Token that must have a
 //         val and valLength
 // @return an indicator of whether NUM_INT was assigned
-bool assignTypeInt (Token & token)
+bool tryToFillInt (Token & token)
 {
     const char * tokStr = token.getStr();
     for (int i = 0; i < token.getStrLength(); ++i) {
@@ -70,7 +70,7 @@ bool assignTypeInt (Token & token)
 // @param token - a partially completed Token that must have a
 //         val and valLength
 // @return an indicator of whether NUM_FLOAT was assigned
-bool assignTypeFloat (Token & token)
+bool tryToFillFloat (Token & token)
 {
     const char * tokStr = token.getStr();
     int dotIdx = -1;
@@ -101,7 +101,7 @@ bool assignTypeFloat (Token & token)
 // @param token - a partially completed Token that must have a
 //         val and valLength
 // @return an indicator of whether the NAME type was assigned
-bool assignTypeName (Token & token)
+bool tryToFillName (Token & token)
 {
     for (int i = 0; i < token.getStrLength(); ++i) {
         const char * tokStr = token.getStr();
@@ -114,40 +114,101 @@ bool assignTypeName (Token & token)
     return true;
 }
 
+// Checks the val and valLength in the given token and assigns
+// either the PAREN_OPEN or PAREN_CLOSE Token::Type to it if 
+// the val is "(" or ")".
+//
+// @param token - a partially completed Token that must have a
+//         val and valLength
+// @return an indicator of whether a PAREN type was assigned
+bool tryToFillParen (Token & token)
+{
+    if (token.getStrLength() != 1) {
+        return false;
+    }
+    switch (token.getStr()[0]) {
+    case ')':
+        token.setType(Token::PAREN_CLOSE);
+        return true;
+    case '(':
+        token.setType(Token::PAREN_OPEN);
+        return true;
+    }
+    return false;
+}
+
+void tokenize (const char * str, Token & toFill)
+{
+    toFill.setStr(str);
+    // Assign the Token a type.
+    if (!(tryToFillOper(toFill) ||
+        tryToFillInt(toFill) ||
+        tryToFillFloat(toFill) ||
+        tryToFillName(toFill) ||
+        tryToFillParen(toFill))) {
+        throw UnrecognizedTokenTypeException(str);
+    }
+}
+
+bool isOperatorChar (char c) {
+    return c == '+' || c == '-' || c == '*' ||
+        c == '/' || c == '=';
+}
+
 int scan (const char * in, TokenCache & tc)
 {
     int inputLength = strlen(in);
-    int maxTokens = tc.getMaxTokensPerChain();
 
     // Copy the input so it can be tokenized in place.
     char input[200];
     strcpy(input, in);
 
+    // Initialize a local set of Tokens to be filled.
     int tokenCounter = 0;
     Token tokens[200];
 
     // Split the input and convert it into Tokens.
-    char * tokStr;
-    tokStr = strtok(input, " ");
-    while (tokStr != nullptr) {
+    char tokStr[50];
+    unsigned int tokStrIdx = 0;
 
-        // Build a Token from the input text.
-        Token token;
-        token.setStr(tokStr);
-
-        // Assign the Token a type.
-        if (!(assignTypeOper(token) || assignTypeInt(token) ||
-            assignTypeFloat(token) || assignTypeName(token))) {
-            throw UnrecognizedTokenTypeException(tokStr);
+    for (int i = 0; input[i] != '\0'; ++i) {
+        char c = input[i];
+        if (isspace(c)) {
+            if (tokStrIdx > 0) {
+                tokStr[tokStrIdx] = '\0';
+                tokenize(tokStr, tokens[tokenCounter]);
+                ++tokenCounter;
+                tokStrIdx = 0;
+            }
+            continue;
         }
-
-        // Add the completed Token to the output holder.
-        tokens[tokenCounter++] = token;
-
-        // Get the next input.
-        tokStr = strtok(nullptr, " ");
+        else if (c == ')' || c == '(') {
+            if (tokStrIdx > 0) {
+                tokStr[tokStrIdx] = '\0';
+                tokenize(tokStr, tokens[tokenCounter]);
+                ++tokenCounter;
+                tokStrIdx = 0;
+            }
+            tokStr[0] = c;
+            tokStr[1] = '\0';
+            tokenize(tokStr, tokens[tokenCounter]);
+            ++tokenCounter;
+        }
+        else if (isdigit(c) || isalpha(c) || isOperatorChar(c)) {
+            tokStr[tokStrIdx++] = c;
+        }
+        else {
+            // TODO need exception for unsupported character
+            throw 5;
+        }
+    }
+    if (tokStrIdx > 0) {
+        tokStr[tokStrIdx++] = '\0';
+        tokenize(tokStr, tokens[tokenCounter]);
+        ++tokenCounter;
     }
 
+    // Add the created tokens to the TokenCache.
     return tc.add(tokens,tokenCounter);
 }
 
