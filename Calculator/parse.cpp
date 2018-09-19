@@ -25,6 +25,23 @@ Token * parseNumber (Token * tc, int idx)
     return tc + idx;
 }
 
+// return root
+Token * parseTerm (Token * tc, int idx, int chainLength)
+{
+    Token::Type type = tc[idx].getType();
+    Token * root = nullptr;
+    if (type == Token::PAREN_OPEN) {
+        root = parseExpression(tc, idx + 1, chainLength);
+    }
+    else if (tc->isNumber()) {
+
+    }
+    else {
+        // parse error
+        throw 1;
+    }
+}
+
 Token * parseOperator (Token * tc, int idx)
 {
     if (!tc[idx].isOperator()) {

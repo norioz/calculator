@@ -52,3 +52,13 @@ void Token::setLeftChild (Token * child) { m_childL = child; }
 
 Token * Token::getRightChild () { return m_childR; }
 void Token::setRightChild (Token * child) { m_childR = child; }
+
+void Token::clear ()
+{
+    m_type = Token::UNASSIGNED;
+    m_val.isFloat = false;
+    m_val.isInt = false;
+    m_strLength = -1;
+    m_childL = nullptr;
+    m_childR = nullptr;
+}

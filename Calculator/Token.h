@@ -48,6 +48,8 @@ public:
     void setRightChild (Token * child);
     Token * getRightChild ();
 
+    void clear ();
+
 private:
     Type m_type = UNASSIGNED;
     char m_str[20] = "UNASSGINED";

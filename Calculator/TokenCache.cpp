@@ -102,6 +102,9 @@ int TokenCache::add (Token * tokens, int num)
 
 void TokenCache::remove (int id)
 {
+    for (int i = 0; i < m_maxTokensPerChain; ++i) {
+        m_chains[id][i].clear();
+    }
     --m_chainCounter;
     m_chainLengths[id] = -1;
 }
