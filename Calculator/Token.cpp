@@ -1,7 +1,74 @@
 #define _CRT_SECURE_NO_WARNINGS
-
 #include <string.h>
+#include <ctype.h>
 #include "Token.h"
+
+Token::Type Token::typeForString (const char * tokStr)
+{
+    int strLength = strlen(tokStr);
+
+    // Check for operator types.
+    if (strLength == 1) {
+        char c = tokStr[0];
+        switch (c) {
+        case '+':
+            return Token::OPER_ADD;
+        case '-':
+            return Token::OPER_SUB;
+        case '*':
+            return Token::OPER_MUL;
+        case '/':
+            return Token::OPER_DIV;
+        case '(':
+            return Token::PAREN_OPEN;
+        case ')':
+            return Token::PAREN_CLOSE;
+        case '=':
+            return Token::OPER_ASSN;
+        }
+    }
+
+    // Check for number types.
+    bool isNumber = tokStr[0] == '+' || tokStr[0] == '-' || isdigit(tokStr[0]);
+    int numDots = 0;
+    for (int i = 1; i < strLength; ++i) {
+        char c = tokStr[i];
+        if (c == '.') {
+            ++numDots;
+        }
+        else if (!isdigit(c)) {
+            isNumber = false;
+            break;
+        }
+    }
+    if (isNumber) {
+        if (numDots = 0) {
+            return Token::NUM_INT;
+        }
+        else if (numDots = 1) {
+            return Token::NUM_FLOAT;
+        }
+        else {
+            return Token::UNKNOWN;
+        }
+    }
+    
+    // Check for Name type.
+    bool isName = true;
+    for (int i = 0; i < strLength; ++i) {
+        char c = tokStr[i];
+        if (!(c == '_' || isalnum(c))) {
+            isName = false;
+            break;
+        }
+    }
+    if (isName) {
+        return Type::NAME;
+    }
+    
+    // Type not found.
+    return Token::UNKNOWN;
+}
 
 bool Token::isNumber ()
 {

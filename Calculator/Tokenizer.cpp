@@ -2,20 +2,24 @@
 #include <ctype.h>
 #include "Tokenizer.h"
 
-//char * m_input;
-//int m_inputIdx;
-//Token m_current;
-
-bool isOperator (char c) {
+bool isOperator (char c)
+{
     return c == '+' || c == '-' || c == '*' ||
         c == '/' || c == '=';
 }
 
+// No zero length tokStr.
 void Tokenizer::tokenize (const char * tokStr)
 {
-    m_current.clear();
+    // Set the Token string.
     m_current.setStr(tokStr);
-    
+
+    Token::Type type = Token::typeForString(tokStr);
+    if (type == Token::UNKNOWN) {
+        // cannot assign type
+        throw 4;
+    }
+    m_current.setType(type);
 }
 
 void Tokenizer::init (const char * input)
@@ -36,48 +40,47 @@ Token Tokenizer::getCurrent ()
 
 bool Tokenizer::next ()
 {
-    // Build up the next token string.
+    // Clear out the current Token.
+    m_current.clear();
 
+    // Build up the next token string.
     char tokStr[MAX_INPUT_LENGTH];
     int tokStrIdx = 0;
 
-    while (m_inputIdx < m_inputLength) {
+    while (m_current.getType() == Token::UNASSIGNED) {
         char c = m_input[m_inputIdx];
+        if (c == '\0') {
 
-        if (isspace(c)) {
+        }
+        else if (isspace(c)) {
             if (tokStrIdx > 0) {
                 tokStr[tokStrIdx] = '\0';
-                break;
+                tokenize(tokStr);
             }
+            ++m_inputIdx;
             continue;
         }
-        else if (c == '(' || c == ')') {
-
+        else if (c == '+' || c == '-') {
+            if (tokStrIdx == 0) {
+                tokStr[tokStrIdx++] = c;
+                ++m_inputIdx;
+            }
+        }
+        else if (c == '(' || c == ')' || isOperator(c)) {
             if (tokStrIdx > 0) {
                 tokStr[tokStrIdx] = '\0';
+                tokenize(tokStr);
             }
             else {
                 tokStr[0] = c;
                 tokStr[1] = '\0';
+                tokenize(tokStr);
                 ++m_inputIdx;
             }
-            break;
         }
-        else if (isOperator(c)) {
-            if (tokStrIdx > 0) {
-                tokStr[tokStrIdx] = '\0';
-                tokStrIdx
-            }
-        }
-
-        else if (isdigit(c) || isalpha(c) || isOperator(c)) {
-            tokStr[tokStrIdx++] = c;
-        }
-
         else {
-            // TODO need exception for unsupported character
-            throw 5;
+            tokStr[tokStrIdx++] = c;
+            ++m_inputIdx;
         }
     }
-    tokenize(tokStr);
 }

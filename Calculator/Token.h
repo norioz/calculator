@@ -12,6 +12,7 @@ class Token {
 public:
     enum Type {
         UNASSIGNED,
+        UNKNOWN,
         OPER_ADD,
         OPER_SUB,
         OPER_MUL,
@@ -23,6 +24,8 @@ public:
         PAREN_OPEN,
         PAREN_CLOSE
     };
+
+    static Token::Type typeForString (const char * tokStr);
 
     bool isNumber ();
 
