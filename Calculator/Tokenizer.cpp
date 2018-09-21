@@ -35,11 +35,23 @@ void Tokenizer::init (const char * input)
 
 Token Tokenizer::getCurrent ()
 {
+    // Throw exception if init hasn't been called.
+    if (m_inputLength = -1) {
+        UninitializedTokenizerException e;
+        throw e;
+    }
+
     return m_current;
 }
 
 bool Tokenizer::next ()
 {
+    // Throw exception if init hasn't been called.
+    if (m_inputLength = -1) {
+        UninitializedTokenizerException e;
+        throw e;
+    }
+
     // Clear out the current Token.
     m_current.clear();
 
@@ -50,7 +62,13 @@ bool Tokenizer::next ()
     while (m_current.getType() == Token::UNASSIGNED) {
         char c = m_input[m_inputIdx];
         if (c == '\0') {
-
+            if (tokStrIdx > 0) {
+                tokStr[tokStrIdx] = '\0';
+                tokenize(tokStr);
+            }
+            else {
+                return false;
+            }
         }
         else if (isspace(c)) {
             if (tokStrIdx > 0) {
@@ -83,4 +101,10 @@ bool Tokenizer::next ()
             ++m_inputIdx;
         }
     }
+    return true;
+}
+
+const char * UninitializedTokenizerException::what () const throw()
+{
+    return "Tokenizer method called before init";
 }
