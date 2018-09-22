@@ -62,10 +62,13 @@ namespace CalculatorTest
             Token t = tok.getCurrent();
             Assert::AreEqual(t.getStr, "+");
 
-            // TODO Ensure that calling next after the last token returns false.
+            // Ensure that calling next after the last token returns false.
             wasUpdated = tok.next();
             Assert::IsFalse(wasUpdated);
             
+            // Subsequent calls to next should also return false.
+            wasUpdated = tok.next();
+            Assert::IsFalse(wasUpdated);
         }
 		//TEST_METHOD(BinOperatorTests)
 		//{
