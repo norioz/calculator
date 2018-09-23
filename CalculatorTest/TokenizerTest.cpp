@@ -2,17 +2,17 @@
 #include "CppUnitTest.h"
 #include "../Calculator/Tokenizer.h"
 
-namespace Microsoft {
-    namespace VisualStudio {
-        namespace CppUnitTestFramework {
-            template<>
-            static std::wstring ToString<enum Token::Type>(const enum Token::Type & tokenType) {
-                return L"Some string representing TokenType.";
-            }
-
-        }
-    }
-}
+//namespace Microsoft {
+//    namespace VisualStudio {
+//        namespace CppUnitTestFramework {
+//            template<>
+//            static std::wstring ToString<enum Token::Type>(const enum Token::Type & tokenType) {
+//                return L"Some string representing TokenType.";
+//            }
+//
+//        }
+//    }
+//}
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -44,7 +44,7 @@ namespace CalculatorTest
             
             // Ensure that current is something after init.
             Token t = tok.getCurrent();
-            Assert::AreEqual(t.getStr, "1");
+            Assert::AreEqual(t.getStr(), "1");
 
             // TODO What should happen if a Tokenizer is initialized with
             // an empty string?
@@ -60,7 +60,7 @@ namespace CalculatorTest
 
             // Ensure that calling next without using getCurrent returns the second val.
             Token t = tok.getCurrent();
-            Assert::AreEqual(t.getStr, "+");
+            Assert::AreEqual(t.getStr(), "+");
 
             // Ensure that calling next after the last token returns false.
             wasUpdated = tok.next();

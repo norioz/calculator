@@ -7,3 +7,7 @@
 //Token * parse (const Token * tokens, int length);
 
 Token * parse (TokenCache & tc, int chainId);
+
+Token * parseNumber (Token * tc, int idx);
+
+Token * parseExpression (Token * tc, int idx, int chainLength);
