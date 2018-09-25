@@ -37,7 +37,7 @@ void Tokenizer::init (const char * input)
 Token Tokenizer::getCurrent ()
 {
     // Throw exception if init hasn't been called.
-    if (m_inputLength = -1) {
+    if (m_inputLength == -1) {
         UninitializedTokenizerException e;
         throw e;
     }
@@ -48,7 +48,7 @@ Token Tokenizer::getCurrent ()
 bool Tokenizer::next ()
 {
     // Throw exception if init hasn't been called.
-    if (m_inputLength = -1) {
+    if (m_inputLength == -1) {
         UninitializedTokenizerException e;
         throw e;
     }
