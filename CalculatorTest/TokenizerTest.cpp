@@ -4,6 +4,9 @@
 
 using namespace std;
 
+// Helper function that loops through the tokens produced
+// by tokenizing in and checks them against the values and types
+// supplied.
 void checkTokens (const char * in, int numVals, array<char*, 10> vals, array<Token::Type, 10> types) {
     Tokenizer tok;
     tok.init(in);
