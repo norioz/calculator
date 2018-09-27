@@ -117,6 +117,11 @@ bool Tokenizer::next ()
     return true;
 }
 
+const Token & Tokenizer::peekNext ()
+{
+    return m_next;
+}
+
 const char * UninitializedTokenizerException::what () const throw()
 {
     return "Tokenizer method called before init";

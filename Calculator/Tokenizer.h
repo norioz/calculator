@@ -46,6 +46,13 @@ public:
     // @throws UninitializedTokenizerException if init hasn't
     //     been called
     bool next ();
+
+    // Get a reference to the next token without changing the
+    // state of the Tokenizer.
+    //
+    // @return a reference to an immutable Token that represents
+    //     what getCurrent will return after next is called.
+    const Token & peekNext ();
 };
 
 // Exception class for Tokenizer method calls that happen

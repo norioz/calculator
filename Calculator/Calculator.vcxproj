@@ -168,7 +168,6 @@
     <ClInclude Include="Tokenizer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CalculatorMain.cpp" />
     <ClCompile Include="CalcWorker.cpp" />
     <ClCompile Include="eval.cpp" />
     <ClCompile Include="Number.cpp" />

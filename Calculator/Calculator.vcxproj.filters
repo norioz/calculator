@@ -53,9 +53,6 @@
     <ClCompile Include="TokenCache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CalculatorMain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="eval.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

@@ -75,6 +75,40 @@ TEST(TokenizerTest, Reinit) {
     EXPECT_FALSE(t.next());
 }
 
+TEST(TokenizerTest, PeekNext) {
+    Tokenizer tok;
+    tok.init("1 +");
+    
+    // Expect that peekNext is valid after init without next call.
+    Token t = tok.peekNext();
+    EXPECT_STREQ("1", t.getStr());
+
+    // Expect that getCurrent is now what next was, after update.
+    tok.next();
+    EXPECT_STREQ("1", tok.getCurrent().getStr());
+    
+    // Expect that next has updated to '+'.
+    t = tok.peekNext();
+    EXPECT_STREQ("+", t.getStr());
+
+    // Expect that getCurrent is '+', after update.
+    tok.next();
+    EXPECT_STREQ("+", tok.getCurrent().getStr());
+
+    // Expect that next has updated and is now type UNASSIGNED
+    // because there is no next Token.
+    t = tok.peekNext();
+    EXPECT_EQ(Token::UNASSIGNED, t.getType());
+
+    // Expect that a call to next returns false.
+    EXPECT_FALSE(tok.next());
+
+    // Expect that both current and next are UNASSIGNED.
+    t = tok.peekNext();
+    EXPECT_EQ(Token::UNASSIGNED, t.getType());
+    EXPECT_EQ(Token::UNASSIGNED, tok.getCurrent().getType());
+}
+
 TEST(TokenizerTest, SpecificExpressions) {
     // INT OP INT
     checkTokens("1 + 2", 3, { "1", "+", "2" }, { Token::NUM_INT, Token::OPER_ADD, Token::NUM_INT });
