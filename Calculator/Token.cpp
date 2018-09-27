@@ -129,3 +129,13 @@ void Token::clear ()
     m_childL = nullptr;
     m_childR = nullptr;
 }
+
+void Token::copy (Token & other)
+{
+    this->setType(other.getType());
+    this->setStr(other.getStr());
+    Number * val = other.getVal();
+    this->setVal(val->isInt ? val->iVal : val->fVal);
+    this->setLeftChild(other.getLeftChild());
+    this->setRightChild(other.getRightChild());
+}

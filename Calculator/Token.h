@@ -72,6 +72,10 @@ public:
     // as when this Token was instantiated.
     void clear ();
 
+    // Replaces the Token's data members with values from other.
+    // Convenience method for getting/setting all data members.
+    void copy (Token & other);
+
 private:
     Type m_type = UNASSIGNED;
     char m_str[20] = "UNASSGINED";

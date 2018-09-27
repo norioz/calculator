@@ -9,72 +9,45 @@ bool isOperator (char c)
         c == '/' || c == '=';
 }
 
-// No zero length tokStr.
-void Tokenizer::tokenize (const char * tokStr)
+void Tokenizer::tokenizeIntoNext (const char * tokStr)
 {
     // Set the Token string.
-    m_current.setStr(tokStr);
+    m_next.setStr(tokStr);
 
     Token::Type type = Token::typeForString(tokStr);
     if (type == Token::UNKNOWN) {
         // cannot assign type
         throw 4;
     }
-    m_current.setType(type);
+    m_next.setType(type);
 }
 
-void Tokenizer::init (const char * input)
+void Tokenizer::setNext ()
 {
-    m_inputLength = strlen(input);
-    if (m_inputLength > MAX_INPUT_LENGTH) {
-        throw 1;
-    }
-    strcpy(m_input, input);
-    m_inputIdx = 0;
-    next();
-}
-
-Token Tokenizer::getCurrent ()
-{
-    // Throw exception if init hasn't been called.
-    if (m_inputLength == -1) {
-        UninitializedTokenizerException e;
-        throw e;
-    }
-
-    return m_current;
-}
-
-bool Tokenizer::next ()
-{
-    // Throw exception if init hasn't been called.
-    if (m_inputLength == -1) {
-        UninitializedTokenizerException e;
-        throw e;
-    }
-
-    // Clear out the current Token.
-    m_current.clear();
+    // Clear out the next holder.
+    m_next.clear();
 
     // Build up the next token string.
     char tokStr[MAX_INPUT_LENGTH];
     int tokStrIdx = 0;
 
-    while (m_current.getType() == Token::UNASSIGNED) {
+    while (m_next.getType() == Token::UNASSIGNED) {
         char c = m_input[m_inputIdx];
+        // c marks the end of the input
         if (c == '\0') {
             if (tokStrIdx > 0) {
                 tokStr[tokStrIdx] = '\0';
-                tokenize(tokStr);
+                tokenizeIntoNext(tokStr);
             }
             else {
-                return false;
+                return;  // leaving next as UNASSIGNED
             }
         }
+        // c is a whitespace
         else if (isspace(c)) {
             if (tokStrIdx > 0) {
                 tokStr[tokStrIdx] = '\0';
-                tokenize(tokStr);
+                tokenizeIntoNext(tokStr);
             }
             ++m_inputIdx;
             continue;
@@ -88,12 +61,12 @@ bool Tokenizer::next ()
         else if (c == '(' || c == ')' || isOperator(c)) {
             if (tokStrIdx > 0) {
                 tokStr[tokStrIdx] = '\0';
-                tokenize(tokStr);
+                tokenizeIntoNext(tokStr);
             }
             else {
                 tokStr[0] = c;
                 tokStr[1] = '\0';
-                tokenize(tokStr);
+                tokenizeIntoNext(tokStr);
                 ++m_inputIdx;
             }
         }
@@ -102,6 +75,45 @@ bool Tokenizer::next ()
             ++m_inputIdx;
         }
     }
+}
+
+void Tokenizer::init (const char * input)
+{
+    m_current.clear();
+    m_inputLength = strlen(input);
+    if (m_inputLength > MAX_INPUT_LENGTH) {
+        throw 1;
+    }
+    strcpy(m_input, input);
+    m_inputIdx = 0;
+    setNext();
+}
+
+Token Tokenizer::getCurrent ()
+{
+    // Throw exception if init hasn't been called.
+    if (m_inputLength == -1) throw UninitializedTokenizerException();
+
+    return m_current;
+}
+
+bool Tokenizer::next ()
+{
+    // Throw exception if init hasn't been called.
+    if (m_inputLength == -1) throw UninitializedTokenizerException();
+
+    // Terminate if there isn't anything next.
+    if (m_next.getType() == Token::UNASSIGNED) {
+        m_current.clear();
+        return false;
+    }
+    
+    // Copy next to current
+    m_current.copy(m_next);
+
+    // Set up the next Token.
+    setNext();
+
     return true;
 }
 

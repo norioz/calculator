@@ -11,22 +11,21 @@ void checkTokens (const char * in, int numVals, array<char*, 10> vals, array<Tok
     Tokenizer tok;
     tok.init(in);
     int idx = 0;
-    do {
+    while(tok.next()) {
         Token token = tok.getCurrent();
         EXPECT_STREQ(vals[idx], token.getStr());
         EXPECT_EQ(types[idx], token.getType());
         ++idx;
-    } while (tok.next());
+    }
     EXPECT_EQ(numVals, idx);
 }
 
-TEST(TokenizerTest, LoadsCurrentOnInit) {
+TEST(TokenizerTest, GetValueBeforeNext) {
     Tokenizer t;
     t.init("1");
     
-    // Expect that a call to init loads the first token.
-    const char * result = t.getCurrent().getStr();
-    EXPECT_STREQ("1", result);
+    // Expect that a call to init does not load the first token.
+    EXPECT_EQ(Token::UNASSIGNED, t.getCurrent().getType());
 }
 
 TEST(TokenizerTest, ThrowsBeforeInit) {
@@ -39,35 +38,39 @@ TEST(TokenizerTest, ThrowsBeforeInit) {
     EXPECT_THROW(t.next(), UninitializedTokenizerException);
 }
 
-// What happens with empty initial input?
-
-TEST(TokenizerTest, NextIsFalseAtEnd) {
+TEST(TokenizerTest, NextAfterInputEnds) {
     Tokenizer t;
-    t.init("1 +");
+    t.init("1");
 
-    // Expect that the first call to next is true for the +.
+    // Expect that the first call to next is true for the 1.
     EXPECT_TRUE(t.next());
 
     // The input has run out. Expect that next returns false.
     EXPECT_FALSE(t.next());
+    EXPECT_EQ(Token::UNASSIGNED, t.getCurrent().getType());
 
     // All subsequent calls to next return false.
     EXPECT_FALSE(t.next());
+    EXPECT_EQ(Token::UNASSIGNED, t.getCurrent().getType());
 }
 
 TEST(TokenizerTest, Reinit) {
     Tokenizer t;
-    t.init("1 +");
+    t.init("1");
     t.next();
     
     // Expect that the Tokenizer can be reinitialized at the end of input.
     EXPECT_FALSE(t.next());
     t.init("2 + 1");
+    EXPECT_EQ(Token::UNASSIGNED, t.getCurrent().getType());
+    t.next();
     EXPECT_STREQ("2", t.getCurrent().getStr());
     
     // Expect that the Tokenizer can be reinitialized before the end of input.
     EXPECT_TRUE(t.next());
     t.init("3");
+    EXPECT_EQ(Token::UNASSIGNED, t.getCurrent().getType());
+    t.next();
     EXPECT_STREQ("3", t.getCurrent().getStr());
     EXPECT_FALSE(t.next());
 }
