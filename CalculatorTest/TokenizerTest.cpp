@@ -1,5 +1,21 @@
 #include "pch.h"
+#include <array>
 #include "../Calculator/Tokenizer.h"
+
+using namespace std;
+
+void checkTokens (const char * in, int numVals, array<char*, 10> vals, array<Token::Type, 10> types) {
+    Tokenizer tok;
+    tok.init(in);
+    int idx = 0;
+    do {
+        Token token = tok.getCurrent();
+        EXPECT_STREQ(vals[idx], token.getStr());
+        EXPECT_EQ(types[idx], token.getType());
+        ++idx;
+    } while (tok.next());
+    EXPECT_EQ(numVals, idx);
+}
 
 TEST(TokenizerTest, LoadsCurrentOnInit) {
     Tokenizer t;
@@ -53,8 +69,14 @@ TEST(TokenizerTest, Reinit) {
     EXPECT_FALSE(t.next());
 }
 
-TEST(TokenizerTest, BinOpsWithInts) {
-    Tokenizer t;
-    t.init("1 + 1");
-
+TEST(TokenizerTest, SpecificExpressions) {
+    // INT OP INT
+    checkTokens("1 + 2", 3, { "1", "+", "2" }, { Token::NUM_INT, Token::OPER_ADD, Token::NUM_INT });
+    checkTokens("3 * 4", 3, { "3", "*", "4" }, { Token::NUM_INT, Token::OPER_MUL, Token::NUM_INT });
+    checkTokens("10 / 11", 3, { "10", "/", "11" }, { Token::NUM_INT, Token::OPER_DIV, Token::NUM_INT });
+    checkTokens("12 - 100", 3, { "12", "-", "100" }, { Token::NUM_INT, Token::OPER_SUB, Token::NUM_INT });
+    // INT OP FLOAT
+    checkTokens("1 + 2.1", 3, { "1", "+", "2.1" }, { Token::NUM_INT, Token::OPER_ADD, Token::NUM_FLOAT});
+    // FLOAT OP FLOAT
+    checkTokens("1.1234 + 2.1", 3, { "1.1234", "+", "2.1" }, { Token::NUM_FLOAT, Token::OPER_ADD, Token::NUM_FLOAT });
 }

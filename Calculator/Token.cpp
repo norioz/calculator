@@ -42,10 +42,10 @@ Token::Type Token::typeForString (const char * tokStr)
         }
     }
     if (isNumber) {
-        if (numDots = 0) {
+        if (numDots == 0) {
             return Token::NUM_INT;
         }
-        else if (numDots = 1) {
+        else if (numDots == 1) {
             return Token::NUM_FLOAT;
         }
         else {
