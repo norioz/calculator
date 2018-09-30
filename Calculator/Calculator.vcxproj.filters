@@ -24,13 +24,7 @@
     <ClInclude Include="parse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="scan.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="eval.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Scope.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Number.h">
@@ -47,16 +41,10 @@
     <ClCompile Include="parse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="scan.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TokenCache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="eval.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Scope.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Token.cpp">

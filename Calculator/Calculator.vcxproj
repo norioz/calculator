@@ -160,9 +160,7 @@
     <ClInclude Include="ParseTree.h" />
     <ClInclude Include="eval.h" />
     <ClInclude Include="Number.h" />
-    <ClInclude Include="scan.h" />
     <ClInclude Include="parse.h" />
-    <ClInclude Include="Scope.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="TokenCache.h" />
     <ClInclude Include="Tokenizer.h" />
@@ -170,9 +168,7 @@
   <ItemGroup>
     <ClCompile Include="eval.cpp" />
     <ClCompile Include="Number.cpp" />
-    <ClCompile Include="scan.cpp" />
     <ClCompile Include="parse.cpp" />
-    <ClCompile Include="Scope.cpp" />
     <ClCompile Include="Token.cpp" />
     <ClCompile Include="TokenCache.cpp" />
     <ClCompile Include="Tokenizer.cpp" />
