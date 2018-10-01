@@ -157,8 +157,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Evaluator.h" />
     <ClInclude Include="ParseTree.h" />
-    <ClInclude Include="eval.h" />
     <ClInclude Include="Number.h" />
     <ClInclude Include="parse.h" />
     <ClInclude Include="Token.h" />
@@ -166,7 +166,7 @@
     <ClInclude Include="Tokenizer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="eval.cpp" />
+    <ClCompile Include="Evaluator.cpp" />
     <ClCompile Include="Number.cpp" />
     <ClCompile Include="parse.cpp" />
     <ClCompile Include="Token.cpp" />

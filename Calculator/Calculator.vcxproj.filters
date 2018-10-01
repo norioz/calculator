@@ -24,9 +24,6 @@
     <ClInclude Include="parse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="eval.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Number.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -34,6 +31,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ParseTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Evaluator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -44,9 +44,6 @@
     <ClCompile Include="TokenCache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="eval.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Token.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -54,6 +51,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Tokenizer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Evaluator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
