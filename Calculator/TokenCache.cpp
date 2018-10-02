@@ -85,7 +85,7 @@ int TokenCache::add (Token * tokens, int num)
         chain[i].setStr(tokens[i].getStr());
         chain[i].setType(tokens[i].getType());
         if (tokens[i].isNumber()) {
-            Number * num = tokens[i].getVal();
+            const Number * num = tokens[i].getVal();
             if (num->isInt) {
                 chain[i].setVal(num->iVal);
             }

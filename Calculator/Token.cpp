@@ -70,36 +70,36 @@ Token::Type Token::typeForString (const char * tokStr)
     return Token::UNKNOWN;
 }
 
-bool Token::isNumber ()
+bool Token::isNumber () const
 {
     return m_type == Token::NUM_FLOAT || m_type == Token::NUM_INT;
 }
 
-bool Token::isOperator ()
+bool Token::isOperator () const
 {
     return m_type == Token::OPER_ADD || m_type == Token::OPER_ASSN ||
         m_type == Token::OPER_DIV || m_type == Token::OPER_MUL ||
         m_type == Token::OPER_SUB;
 }
 
-bool Token::isParen ()
+bool Token::isParen () const
 {
     return m_type == Token::PAREN_CLOSE || m_type == Token::PAREN_OPEN;
 }
 
-Token::Type Token::getType () { return m_type; }
+Token::Type Token::getType () const { return m_type; }
 void Token::setType (Token::Type t) { m_type = t; }
 
-char * Token::getStr () { return m_str; }
+const char * Token::getStr () const { return m_str; }
 void Token::setStr (const char * str)
 {
     strcpy(m_str, str);
     m_strLength = strlen(m_str);
 }
 
-int Token::getStrLength () { return m_strLength; }
+int Token::getStrLength () const { return m_strLength; }
 
-Number * Token::getVal ()
+const Number * Token::getVal () const
 {
     return &m_val;
 }
@@ -114,10 +114,10 @@ void Token::setVal (double val)
     m_val.fVal = val;
 }
 
-Token * Token::getLeftChild () { return m_childL; }
+Token * Token::getLeftChild () const { return m_childL; }
 void Token::setLeftChild (Token * child) { m_childL = child; }
 
-Token * Token::getRightChild () { return m_childR; }
+Token * Token::getRightChild () const { return m_childR; }
 void Token::setRightChild (Token * child) { m_childR = child; }
 
 void Token::clear ()
@@ -134,7 +134,7 @@ void Token::copy (Token & other)
 {
     this->setType(other.getType());
     this->setStr(other.getStr());
-    Number * val = other.getVal();
+    const Number * val = other.getVal();
     this->setVal(val->isInt ? val->iVal : val->fVal);
     this->setLeftChild(other.getLeftChild());
     this->setRightChild(other.getRightChild());

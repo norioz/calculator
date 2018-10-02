@@ -34,38 +34,38 @@ public:
     static Token::Type typeForString (const char * tokStr);
 
     // Indicates if this Token is a number.
-    bool isNumber ();
+    bool isNumber () const;
 
     // Indicates if this Token is an operator.
-    bool isOperator ();
+    bool isOperator () const;
 
     // Indicates if this Token is either an open or close paren.
-    bool isParen();
+    bool isParen() const;
 
     // Setter and getter for the Type of this Token.
     void setType (Type t);
-    Token::Type getType ();
+    Token::Type getType () const;
 
     // Setter and getter for the c-string value of this Token.
     void setStr (const char * str);
-    char * getStr ();
+    const char * getStr () const;
 
     // Getter for the length of the c-string value of this Token.
     // The length of the value is set automatically with setStr.
-    int getStrLength ();
+    int getStrLength () const;
 
     // Getters and setters for the numeric values of this Token.
     void setVal (int val);
     void setVal (double val);
-    Number * getVal ();
+    const Number * getVal () const;
 
     // Getter and setter for the left child of this Token.
     void setLeftChild (Token * child);
-    Token * getLeftChild ();
+    Token * getLeftChild () const;
 
     // Getter and setter for the right child of this Token.
     void setRightChild (Token * child);
-    Token * getRightChild ();
+    Token * getRightChild () const;
 
     // Resets this Token to the same state as when it was created.
     // Immediate calls to getters will return the same values
