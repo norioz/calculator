@@ -1,5 +1,6 @@
+//#include <array>
+#include <vector>
 #include "pch.h"
-#include <array>
 #include "../Calculator/Tokenizer.h"
 
 using namespace std;
@@ -7,7 +8,7 @@ using namespace std;
 // Helper function that loops through the tokens produced
 // by tokenizing in and checks them against the values and types
 // supplied.
-void checkTokens (const char * in, int numVals, array<char*, 10> vals, array<Token::Type, 10> types) {
+void checkTokens (const char * in, int numVals, vector<char*> vals, vector<Token::Type> types) {
     Tokenizer tok;
     tok.init(in);
     int idx = 0;

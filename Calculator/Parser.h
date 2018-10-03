@@ -13,6 +13,6 @@ public:
     static int getPrecedence (Token::Type op);
     static bool isLeftAssociative (Token::Type op);
 
-    ParseTreeNode & parse (Tokenizer & tokenizer);
+    const ParseTreeNode * parse (Tokenizer & tokenizer);
     void reset ();
 };

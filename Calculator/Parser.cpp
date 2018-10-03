@@ -26,7 +26,7 @@ void Parser::reset ()
 // TODO copies into data?
 ParseTreeNode * Parser::wrapToken (Token token)
 {
-    ParseTreeNode node = m_nodes[m_freeNodeIdx++];
+    ParseTreeNode & node = m_nodes[m_freeNodeIdx++];
     node.data = token;
     return &node;
 }
@@ -58,7 +58,7 @@ ParseTreeNode * Parser::parseTerm (Tokenizer & tokenizer)
             throw 8;
         }
         tokenizer.next();
-        return wrapToken(tokenizer.getCurrent());
+        return wrapToken(tok);
     }
 }
 
@@ -84,7 +84,9 @@ ParseTreeNode * Parser::parseExpression (Tokenizer & tokenizer, int minPrecidenc
     return root;
 }
 
-ParseTreeNode & Parser::parse (Tokenizer & tokenizer)
+const ParseTreeNode * Parser::parse (Tokenizer & tokenizer)
 {
-    return *parseExpression(tokenizer, 1);
+    // Advance to the first Token.
+    tokenizer.next();
+    return parseExpression(tokenizer, 1);
 }
