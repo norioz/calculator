@@ -6,13 +6,14 @@ class Parser {
     ParseTreeNode m_nodes[200];
     int m_freeNodeIdx = 0;
 
-    ParseTreeNode * wrapToken (Token token);
-    ParseTreeNode * parseTerm (Tokenizer & tokenizer);
-    ParseTreeNode * parseExpression (Tokenizer & tokenizer, int minPrecidence);
+    ParseTreeNode & wrapToken (Token token);
+    ParseTreeNode & parseTerm (Tokenizer & tokenizer);
+    ParseTreeNode & parseExpression (Tokenizer & tokenizer, int minPrecidence);
 public:
     static int getPrecedence (Token::Type op);
     static bool isLeftAssociative (Token::Type op);
 
-    const ParseTreeNode * parse (Tokenizer & tokenizer);
+    ParseTreeNode & getNodeById (int id);
+    const ParseTreeNode & parse (Tokenizer & tokenizer);
     void reset ();
 };

@@ -3,6 +3,7 @@
 
 struct ParseTreeNode {
     Token data;
-    const ParseTreeNode * left = nullptr;
-    const ParseTreeNode * right = nullptr;
+    int id = -1;
+    int leftId = -1;
+    int rightId = -1;
 };

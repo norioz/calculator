@@ -10,55 +10,39 @@
 using namespace std;
 
 // left first
-void checkTreeBreadthFirst (const ParseTreeNode * rt, vector<string> expectedStrs, vector<Token::Type> expectedTypes)
+void checkTreeDepthFirst (Parser parser, const ParseTreeNode & root, vector<string> expectedStrs, vector<Token::Type> expectedTypes)
 {
-    //vector<Token> actualTokens;
-    Token tokens[100];
-    int tokenIdx = 0;
-    const ParseTreeNode * todo[100];
-    int nodeIdx = 0;
-    todo[0] = rt;
-    while (nodeIdx >= 0) {
-        const ParseTreeNode * ptr = todo[nodeIdx--];
-        tokens[tokenIdx++] = ptr->data;
-        //actualTokens.push_back(ptr->data);
-        if (ptr->left != nullptr) {
-            todo[++nodeIdx] = ptr->left;
+    vector<Token> actualTokens;
+    vector<ParseTreeNode> todo;
+    todo.push_back(root);
+    while (!todo.empty()) {
+        ParseTreeNode & node = todo[0];
+        actualTokens.push_back(node.data);
+        if (node.leftId >= 0) {
+            todo.push_back(parser.getNodeById(node.leftId));
         }
-        if (ptr->right != nullptr) {
-            todo[++nodeIdx] = ptr->right;
+        if (node.rightId >= 0) {
+            todo.push_back(parser.getNodeById(node.rightId));
         }
+        todo.erase(todo.begin());
     }
 
-    //vector<const ParseTreeNode*> todo;
-    //todo.push_back(root);
-    //while (!todo.empty()) {
-    //    const ParseTreeNode * nodePtr = todo[0];
-    //    todo.erase(todo.begin());
-    //    actualTokens.push_back(nodePtr->data);
-    //    if (nodePtr->left != nullptr) {
-    //        todo.push_back(nodePtr->left);
-    //    }
-    //    if (nodePtr->right != nullptr) {
-    //        todo.push_back(nodePtr->right);
-    //    }
-    //}
+    ASSERT_EQ(expectedStrs.size(), actualTokens.size());
 
-    // Expect that the flattenned tree is the same length as the expected strings.
-    //EXPECT_EQ(expectedStrs.size(), actualTokens.size());
-    
-    // Check all Token types and string values.
-    /*for (int i = 0; i < actualTokens.size(); ++i) {
+    for (int i = 0; i < expectedStrs.size(); ++i) {
         Token actualToken = actualTokens[i];
         EXPECT_STREQ(expectedStrs[i].c_str(), actualToken.getStr());
         EXPECT_EQ(expectedTypes[i], actualToken.getType());
-    }*/
+    }
 }
 
 TEST(ParserTest, ParseTreeCorrectness) {
     Tokenizer t;
     t.init("1");
     Parser p;
-    const ParseTreeNode * root = p.parse(t);
-    checkTreeBreadthFirst(root, { "1" }, { Token::NUM_INT });
+    checkTreeDepthFirst(p, p.parse(t), { "1" }, { Token::NUM_INT });
+    t.init("1 + 2");
+    // TODO reset seems unneeded. The parser should reset on parse.
+    p.reset();
+    checkTreeDepthFirst(p, p.parse(t), { "+", "1", "2" }, { Token::OPER_ADD, Token::NUM_INT, Token::NUM_INT });
 }
