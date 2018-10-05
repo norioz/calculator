@@ -24,21 +24,21 @@ void Parser::reset ()
 }
 
 // TODO copies into data?
-ParseTreeNode & Parser::wrapToken (Token token)
+ParseTreeNode * Parser::wrapToken (Token token)
 {
-    ParseTreeNode & node = m_nodes[m_freeNodeIdx];
-    node.data = token;
-    node.id = m_freeNodeIdx;
+    ParseTreeNode * node = m_nodes + m_freeNodeIdx;
+    node->data = token;
+    node->id = m_freeNodeIdx;
     ++m_freeNodeIdx;
     return node;
 }
 
-ParseTreeNode & Parser::parseTerm (Tokenizer & tokenizer)
+ParseTreeNode * Parser::parseTerm (Tokenizer & tokenizer)
 {
     Token tok = tokenizer.getCurrent();
     if (tok.getType() == Token::PAREN_OPEN) {
         tokenizer.next();
-        ParseTreeNode  & valTree = parseExpression(tokenizer, 1);
+        ParseTreeNode  * valTree = parseExpression(tokenizer, 1);
         if (tokenizer.getCurrent().getType() != Token::PAREN_CLOSE) {
             // unmatched (
             throw 5;
@@ -64,29 +64,28 @@ ParseTreeNode & Parser::parseTerm (Tokenizer & tokenizer)
     }
 }
 
-ParseTreeNode & Parser::parseExpression (Tokenizer & tokenizer, int minPrecidence)
+ParseTreeNode * Parser::parseExpression (Tokenizer & tokenizer, int minPrecidence)
 {
-    ParseTreeNode & root = parseTerm(tokenizer);
+    ParseTreeNode * root = parseTerm(tokenizer);
 
-    const Token nextToken = tokenizer.peekNext();
-    while (nextToken.isOperator() && getPrecedence(nextToken.getType()) >= minPrecidence) {
-        tokenizer.next();
-        ParseTreeNode & opNode = wrapToken(tokenizer.getCurrent());
-        Token::Type opType = opNode.data.getType();
+    while (tokenizer.getCurrent().isOperator() && 
+        getPrecedence(tokenizer.getCurrent().getType()) >= minPrecidence) {
+        ParseTreeNode * opNode = wrapToken(tokenizer.getCurrent());
+        Token::Type opType = opNode->data.getType();
         int nextMinPrecedence = isLeftAssociative(opType) ? getPrecedence(opType) : getPrecedence(opType) + 1;
 
         tokenizer.next();
-        ParseTreeNode & rhs = parseExpression(tokenizer, nextMinPrecedence);
+        ParseTreeNode * rhs = parseExpression(tokenizer, nextMinPrecedence);
 
-        opNode.leftId = root.id;
-        opNode.rightId = rhs.id;
+        opNode->leftId = root->id;
+        opNode->rightId = rhs->id;
         root = opNode;
     }
 
     return root;
 }
 
-ParseTreeNode & Parser::getNodeById (int id)
+const ParseTreeNode & Parser::getNodeById (int id)
 {
     // TODO check for lt 0 and gte m_freeNodeIdx
     return m_nodes[id];
@@ -97,5 +96,5 @@ const ParseTreeNode & Parser::parse (Tokenizer & tokenizer)
 {
     // Advance to the first Token.
     tokenizer.next();
-    return parseExpression(tokenizer, 1);
+    return *parseExpression(tokenizer, 1);
 }

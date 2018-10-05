@@ -10,21 +10,28 @@
 using namespace std;
 
 // left first
-void checkTreeDepthFirst (Parser parser, const ParseTreeNode & root, vector<string> expectedStrs, vector<Token::Type> expectedTypes)
+void checkTreeDepthFirst (const char * expr, vector<string> expectedStrs, vector<Token::Type> expectedTypes)
 {
+    // Parser parser, const ParseTreeNode & root
+    Tokenizer tokenizer;
+    tokenizer.init(expr);
+    Parser parser;
+    ParseTreeNode root = parser.parse(tokenizer);
     vector<Token> actualTokens;
     vector<ParseTreeNode> todo;
     todo.push_back(root);
     while (!todo.empty()) {
-        ParseTreeNode & node = todo[0];
+        ParseTreeNode node = todo.back();
+        todo.pop_back();
         actualTokens.push_back(node.data);
         if (node.leftId >= 0) {
-            todo.push_back(parser.getNodeById(node.leftId));
+            ParseTreeNode n = parser.getNodeById(node.leftId);
+            todo.push_back(n);
         }
         if (node.rightId >= 0) {
-            todo.push_back(parser.getNodeById(node.rightId));
+            ParseTreeNode n = parser.getNodeById(node.rightId);
+            todo.push_back(n);
         }
-        todo.erase(todo.begin());
     }
 
     ASSERT_EQ(expectedStrs.size(), actualTokens.size());
@@ -37,12 +44,7 @@ void checkTreeDepthFirst (Parser parser, const ParseTreeNode & root, vector<stri
 }
 
 TEST(ParserTest, ParseTreeCorrectness) {
-    Tokenizer t;
-    t.init("1");
-    Parser p;
-    checkTreeDepthFirst(p, p.parse(t), { "1" }, { Token::NUM_INT });
-    t.init("1 + 2");
     // TODO reset seems unneeded. The parser should reset on parse.
-    p.reset();
-    checkTreeDepthFirst(p, p.parse(t), { "+", "1", "2" }, { Token::OPER_ADD, Token::NUM_INT, Token::NUM_INT });
+    checkTreeDepthFirst("1", { "1" }, { Token::NUM_INT });
+    checkTreeDepthFirst("1 + 2", { "+", "1", "2" }, { Token::OPER_ADD, Token::NUM_INT, Token::NUM_INT });
 }
