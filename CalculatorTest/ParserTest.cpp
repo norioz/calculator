@@ -10,7 +10,7 @@
 using namespace std;
 
 // left first
-void checkTreeDepthFirst (const char * expr, vector<string> expectedStrs, vector<Token::Type> expectedTypes)
+void checkTreeBreadthFirst (const char * expr, vector<string> expectedStrs, vector<Token::Type> expectedTypes)
 {
     // Parser parser, const ParseTreeNode & root
     Tokenizer tokenizer;
@@ -18,19 +18,22 @@ void checkTreeDepthFirst (const char * expr, vector<string> expectedStrs, vector
     Parser parser;
     ParseTreeNode root = parser.parse(tokenizer);
     vector<Token> actualTokens;
-    vector<ParseTreeNode> todo;
-    todo.push_back(root);
-    while (!todo.empty()) {
-        ParseTreeNode node = todo.back();
-        todo.pop_back();
-        actualTokens.push_back(node.data);
-        if (node.leftId >= 0) {
-            ParseTreeNode n = parser.getNodeById(node.leftId);
-            todo.push_back(n);
+    ParseTreeNode * todoPtrs[200];
+    int todoPtrIdx = 0;
+//    vector<ParseTreeNode> todo;
+    todoPtrs[todoPtrIdx++] = &root;
+//    todo.push_back(root);
+    while (todoPtrIdx > 0) {
+        ParseTreeNode * node = todoPtrs[todoPtrIdx - 1];
+        --todoPtrIdx;
+        actualTokens.push_back(node->data);
+        if (node->leftId >= 0) {
+            ParseTreeNode n = parser.getNodeById(node->leftId);
+            todoPtrs[todoPtrIdx++] = &n;
         }
-        if (node.rightId >= 0) {
-            ParseTreeNode n = parser.getNodeById(node.rightId);
-            todo.push_back(n);
+        if (node->rightId >= 0) {
+            ParseTreeNode n = parser.getNodeById(node->rightId);
+            todoPtrs[todoPtrIdx++] = &n;
         }
     }
 
@@ -45,6 +48,6 @@ void checkTreeDepthFirst (const char * expr, vector<string> expectedStrs, vector
 
 TEST(ParserTest, ParseTreeCorrectness) {
     // TODO reset seems unneeded. The parser should reset on parse.
-    checkTreeDepthFirst("1", { "1" }, { Token::NUM_INT });
-    checkTreeDepthFirst("1 + 2", { "+", "1", "2" }, { Token::OPER_ADD, Token::NUM_INT, Token::NUM_INT });
+    checkTreeBreadthFirst("1", { "1" }, { Token::NUM_INT });
+    checkTreeBreadthFirst("1 + 2", { "+", "2", "1" }, { Token::OPER_ADD, Token::NUM_INT, Token::NUM_INT });
 }
