@@ -5,10 +5,20 @@
 #include "../Calculator/ParseTreeNode.h"
 #include "../Calculator/Tokenizer.h"
 
-//ParseTreeNode & parse (Tokenizer & tokenizer);
-
 using namespace std;
 
+// Helper method that determines correctness of a parse tree
+// by linearizing it in a breadth-first, left to right order.
+// EXPECTS that the Tokens in the linearized parse tree match
+// the expected strings and expected types, in the order that
+// they are passed in.
+// 
+// @param expr - an expression to parse.
+// @param expectedStrs - a vector of strings that represent
+//     what the Token values should be after linearization.
+// @param expectedTypes - a vector of Token types that
+//     represent what the Token types should be after
+//     linearization.
 void checkTreeBreadthFirst (const char * expr, vector<string> expectedStrs, vector<Token::Type> expectedTypes)
 {
     // Parser parser, const ParseTreeNode & root
@@ -43,8 +53,11 @@ void checkTreeBreadthFirst (const char * expr, vector<string> expectedStrs, vect
     }
 }
 
-TEST(ParserTest, ParseTreeCorrectness) {
+
+TEST(ParserTest, BinOps) {
     checkTreeBreadthFirst("1", { "1" }, { Token::NUM_INT });
     checkTreeBreadthFirst("1 + 2", { "+", "2", "1" }, { Token::OPER_ADD, Token::NUM_INT, Token::NUM_INT });
     checkTreeBreadthFirst("1 - 2 - 3", { "-", "3", "-", "2", "1" }, { Token::OPER_SUB, Token::NUM_INT, Token::OPER_SUB, Token::NUM_INT, Token::NUM_INT });
+    checkTreeBreadthFirst("2 * 3 + 4", { "+", "4", "*", "3", "2" }, { Token::OPER_ADD, Token::NUM_INT, Token::OPER_MUL, Token::NUM_INT, Token::NUM_INT });
+    checkTreeBreadthFirst("2 + 3 * 4", { "+", "*", "4", "3", "2" }, { Token::OPER_ADD, Token::OPER_MUL, Token::NUM_INT, Token::NUM_INT, Token::NUM_INT });
 }
