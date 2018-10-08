@@ -72,7 +72,7 @@ ParseTreeNode * Parser::parseExpression (Tokenizer & tokenizer, int minPrecidenc
         getPrecedence(tokenizer.getCurrent().getType()) >= minPrecidence) {
         ParseTreeNode * opNode = wrapToken(tokenizer.getCurrent());
         Token::Type opType = opNode->data.getType();
-        int nextMinPrecedence = isLeftAssociative(opType) ? getPrecedence(opType) : getPrecedence(opType) + 1;
+        int nextMinPrecedence = isLeftAssociative(opType) ? getPrecedence(opType) + 1 : getPrecedence(opType);
 
         tokenizer.next();
         ParseTreeNode * rhs = parseExpression(tokenizer, nextMinPrecedence);

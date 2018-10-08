@@ -17,19 +17,19 @@ void checkTreeBreadthFirst (const char * expr, vector<string> expectedStrs, vect
     Parser parser;
     ParseTreeNode root = parser.parse(tokenizer);
     vector<Token> actualTokens;
-    ParseTreeNode * todoPtrs[200];
+    const ParseTreeNode * todoPtrs[200];
     int todoPtrIdx = 0;
     todoPtrs[todoPtrIdx++] = &root;
     while (todoPtrIdx > 0) {
-        ParseTreeNode * node = todoPtrs[todoPtrIdx - 1];
+        const ParseTreeNode * node = todoPtrs[todoPtrIdx - 1];
         --todoPtrIdx;
         actualTokens.push_back(node->data);
         if (node->leftId >= 0) {
-            ParseTreeNode n = parser.getNodeById(node->leftId);
+            const ParseTreeNode & n = parser.getNodeById(node->leftId);
             todoPtrs[todoPtrIdx++] = &n;
         }
         if (node->rightId >= 0) {
-            ParseTreeNode n = parser.getNodeById(node->rightId);
+            const ParseTreeNode & n = parser.getNodeById(node->rightId);
             todoPtrs[todoPtrIdx++] = &n;
         }
     }
@@ -47,5 +47,5 @@ TEST(ParserTest, ParseTreeCorrectness) {
     // TODO reset seems unneeded. The parser should reset on parse.
     checkTreeBreadthFirst("1", { "1" }, { Token::NUM_INT });
     checkTreeBreadthFirst("1 + 2", { "+", "2", "1" }, { Token::OPER_ADD, Token::NUM_INT, Token::NUM_INT });
-    checkTreeBreadthFirst("1 - 2 - 3", { "-", "-", "3", "2", "1" }, { Token::OPER_SUB, Token::OPER_SUB, Token::NUM_INT, Token::NUM_INT, Token::NUM_INT });
+    checkTreeBreadthFirst("1 - 2 - 3", { "-", "3", "-", "2", "1" }, { Token::OPER_SUB, Token::NUM_INT, Token::OPER_SUB, Token::NUM_INT, Token::NUM_INT });
 }
