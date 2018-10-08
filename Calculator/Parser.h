@@ -15,5 +15,4 @@ public:
 
     const ParseTreeNode & getNodeById (int id);
     const ParseTreeNode & parse (Tokenizer & tokenizer);
-    void reset ();
 };

@@ -18,11 +18,6 @@ bool Parser::isLeftAssociative (Token::Type op)
     return true;
 }
 
-void Parser::reset ()
-{
-    m_freeNodeIdx = 0;
-}
-
 // TODO copies into data?
 ParseTreeNode * Parser::wrapToken (Token token)
 {
@@ -94,6 +89,9 @@ const ParseTreeNode & Parser::getNodeById (int id)
 // returns a ref to the root
 const ParseTreeNode & Parser::parse (Tokenizer & tokenizer)
 {
+    // Rest the node store.
+    m_freeNodeIdx = 0;
+
     // Advance to the first Token.
     tokenizer.next();
     return *parseExpression(tokenizer, 0);

@@ -44,7 +44,6 @@ void checkTreeBreadthFirst (const char * expr, vector<string> expectedStrs, vect
 }
 
 TEST(ParserTest, ParseTreeCorrectness) {
-    // TODO reset seems unneeded. The parser should reset on parse.
     checkTreeBreadthFirst("1", { "1" }, { Token::NUM_INT });
     checkTreeBreadthFirst("1 + 2", { "+", "2", "1" }, { Token::OPER_ADD, Token::NUM_INT, Token::NUM_INT });
     checkTreeBreadthFirst("1 - 2 - 3", { "-", "3", "-", "2", "1" }, { Token::OPER_SUB, Token::NUM_INT, Token::OPER_SUB, Token::NUM_INT, Token::NUM_INT });
