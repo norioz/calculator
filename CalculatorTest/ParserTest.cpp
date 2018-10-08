@@ -9,7 +9,6 @@
 
 using namespace std;
 
-// left first
 void checkTreeBreadthFirst (const char * expr, vector<string> expectedStrs, vector<Token::Type> expectedTypes)
 {
     // Parser parser, const ParseTreeNode & root
@@ -20,9 +19,7 @@ void checkTreeBreadthFirst (const char * expr, vector<string> expectedStrs, vect
     vector<Token> actualTokens;
     ParseTreeNode * todoPtrs[200];
     int todoPtrIdx = 0;
-//    vector<ParseTreeNode> todo;
     todoPtrs[todoPtrIdx++] = &root;
-//    todo.push_back(root);
     while (todoPtrIdx > 0) {
         ParseTreeNode * node = todoPtrs[todoPtrIdx - 1];
         --todoPtrIdx;
@@ -50,4 +47,5 @@ TEST(ParserTest, ParseTreeCorrectness) {
     // TODO reset seems unneeded. The parser should reset on parse.
     checkTreeBreadthFirst("1", { "1" }, { Token::NUM_INT });
     checkTreeBreadthFirst("1 + 2", { "+", "2", "1" }, { Token::OPER_ADD, Token::NUM_INT, Token::NUM_INT });
+    checkTreeBreadthFirst("1 - 2 - 3", { "-", "-", "3", "2", "1" }, { Token::OPER_SUB, Token::OPER_SUB, Token::NUM_INT, Token::NUM_INT, Token::NUM_INT });
 }

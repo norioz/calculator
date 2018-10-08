@@ -96,5 +96,5 @@ const ParseTreeNode & Parser::parse (Tokenizer & tokenizer)
 {
     // Advance to the first Token.
     tokenizer.next();
-    return *parseExpression(tokenizer, 1);
+    return *parseExpression(tokenizer, 0);
 }
