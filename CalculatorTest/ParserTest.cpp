@@ -61,3 +61,8 @@ TEST(ParserTest, BinOps) {
     checkTreeBreadthFirst("2 * 3 + 4", { "+", "4", "*", "3", "2" }, { Token::OPER_ADD, Token::NUM_INT, Token::OPER_MUL, Token::NUM_INT, Token::NUM_INT });
     checkTreeBreadthFirst("2 + 3 * 4", { "+", "*", "4", "3", "2" }, { Token::OPER_ADD, Token::OPER_MUL, Token::NUM_INT, Token::NUM_INT, Token::NUM_INT });
 }
+
+TEST(ParserTest, BinOpsWithParens) {
+    checkTreeBreadthFirst("1 - (2 - 3)", { "-", "-", "3", "2", "1" }, { Token::OPER_SUB, Token::OPER_SUB, Token::NUM_INT, Token::NUM_INT, Token::NUM_INT });
+    checkTreeBreadthFirst("(1 - 2) - 3", { "-", "3", "-", "2", "1" }, { Token::OPER_SUB, Token::NUM_INT, Token::OPER_SUB, Token::NUM_INT, Token::NUM_INT });
+}
