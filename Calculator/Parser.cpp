@@ -1,5 +1,8 @@
 #include "Parser.h"
 
+// ----------------
+// IMPL Parser
+
 int Parser::getPrecedence (Token::Type op)
 {
     switch (op) {
@@ -8,8 +11,7 @@ int Parser::getPrecedence (Token::Type op)
     case Token::OPER_MUL: return 2;
     case Token::OPER_DIV: return 2;
     default:
-        // not a supported operator
-        throw 8;
+        throw ParseException("unexpected operator");
     }
 }
 
@@ -18,9 +20,11 @@ bool Parser::isLeftAssociative (Token::Type op)
     return true;
 }
 
-// TODO copies into data?
 ParseTreeNode * Parser::wrapToken (Token token)
 {
+    if (m_freeNodeIdx == MAX_TREE_SIZE) {
+        throw ParseException("max parse tree size reached");
+    }
     ParseTreeNode * node = m_nodes + m_freeNodeIdx;
     node->data = token;
     node->id = m_freeNodeIdx;
@@ -35,24 +39,20 @@ ParseTreeNode * Parser::parseTerm (Tokenizer & tokenizer)
         tokenizer.next();
         ParseTreeNode  * valTree = parseExpression(tokenizer, 1);
         if (tokenizer.getCurrent().getType() != Token::PAREN_CLOSE) {
-            // unmatched (
-            throw 5;
+            throw ParseException("unmatched open paren");
         }
         tokenizer.next();
         return valTree;
     }
     else if (tok.getType() == Token::UNASSIGNED) {
-        // source ended unexpectedly
-        throw 6;
+        throw ParseException("source ended unexpectedly");
     }
     else if (tok.isOperator()) {
-        // expected atom, not operator
-        throw 7;
+        throw ParseException("atom expected, not operator");
     }
     else {
         if (!tok.isNumber()) {
-            // expected number
-            throw 8;
+            throw ParseException("expected number");
         }
         tokenizer.next();
         return wrapToken(tok);
@@ -82,11 +82,12 @@ ParseTreeNode * Parser::parseExpression (Tokenizer & tokenizer, int minPrecidenc
 
 const ParseTreeNode & Parser::getNodeById (int id)
 {
-    // TODO check for lt 0 and gte m_freeNodeIdx
+    if (id < 0 || id >= m_freeNodeIdx) {
+        throw ParseTreeException("node index out of bounds");
+    }
     return m_nodes[id];
 }
 
-// returns a ref to the root
 const ParseTreeNode & Parser::parse (Tokenizer & tokenizer)
 {
     // Rest the node store.
@@ -95,4 +96,30 @@ const ParseTreeNode & Parser::parse (Tokenizer & tokenizer)
     // Advance to the first Token.
     tokenizer.next();
     return *parseExpression(tokenizer, 0);
+}
+
+// ----------------
+// IMPL ParseException
+
+ParseException::ParseException (const char * msg)
+{
+    m_msg = msg;
+}
+
+const char * ParseException::what () const throw()
+{
+    return m_msg;
+}
+
+// ----------------
+// IMPL ParseException
+
+ParseTreeException::ParseTreeException (const char * msg)
+{
+    m_msg = msg;
+}
+
+const char * ParseTreeException::what () const throw()
+{
+    return m_msg;
 }

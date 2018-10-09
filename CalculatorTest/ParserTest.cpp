@@ -66,3 +66,5 @@ TEST(ParserTest, BinOpsWithParens) {
     checkTreeBreadthFirst("1 - (2 - 3)", { "-", "-", "3", "2", "1" }, { Token::OPER_SUB, Token::OPER_SUB, Token::NUM_INT, Token::NUM_INT, Token::NUM_INT });
     checkTreeBreadthFirst("(1 - 2) - 3", { "-", "3", "-", "2", "1" }, { Token::OPER_SUB, Token::NUM_INT, Token::OPER_SUB, Token::NUM_INT, Token::NUM_INT });
 }
+
+// TODO Add tests for ParseExpcetions.

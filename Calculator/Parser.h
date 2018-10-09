@@ -1,6 +1,8 @@
 #pragma once
+#include <exception>
 #include "ParseTreeNode.h"
 #include "Tokenizer.h"
+#define MAX_TREE_SIZE 200
 
 // A precedence climbing parser that stores nodes internally.
 // Parser uses a passed in Tokenizer to form a parse tree based
@@ -20,7 +22,7 @@
 //  const ParseTreeNode left = p.getNodeById(root.leftId);
 
 class Parser {
-    ParseTreeNode m_nodes[200];
+    ParseTreeNode m_nodes[MAX_TREE_SIZE];
     int m_freeNodeIdx = 0;
 
     // Wraps the given Token in a ParseTreeNode that
@@ -85,4 +87,18 @@ public:
     // @return a ref to a ParseTreeNode that represents the root of the
     //     parse tree.
     const ParseTreeNode & parse (Tokenizer & tokenizer);
+};
+
+class ParseException : public std::exception {
+    const char * m_msg;
+public:
+    ParseException (const char * msg);
+    virtual const char * what () const throw();
+};
+
+class ParseTreeException : public std::exception {
+    const char * m_msg;
+public:
+    ParseTreeException (const char * msg);
+    virtual const char * what () const throw();
 };
