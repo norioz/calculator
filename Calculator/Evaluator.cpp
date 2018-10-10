@@ -1,16 +1,19 @@
 #include "Evaluator.h"
+#include "Token.h"
 
-Number Evaluator::eval (Token * root)
+Number Evaluator::eval (Parser & parser, const ParseTreeNode & root)
 {
-    if (root->isNumber()) {
-        return *(root->getVal());
+    const Token & rootToken = root.data;
+    
+    if (rootToken.isNumber()) {
+        return *(rootToken.getVal());
     }
-    if (root->isOperator()) {
-        Number valLeft = eval(root->getLeftChild());
-        Number valRight = eval(root->getRightChild());
+    if (rootToken.isOperator()) {
+        Number valLeft = eval(parser, parser.getNodeById(root.leftId));
+        Number valRight = eval(parser, parser.getNodeById(root.rightId));
 
         Number result;
-        Token::Type op = root->getType();
+        Token::Type op = rootToken.getType();
         switch (op) {
         case Token::OPER_ADD:
             result = valLeft + valRight;

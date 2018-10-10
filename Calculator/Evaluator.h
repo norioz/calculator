@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Number.h"
-#include "Token.h"
+#include "Parser.h"
 
 class Evaluator {
 public:
-    Number eval (Token * root);
+    Number eval (Parser & parser, const ParseTreeNode & root);
 };
